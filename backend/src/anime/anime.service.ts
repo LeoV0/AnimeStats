@@ -26,9 +26,13 @@ export class AnimeService {
   }
 
   async getAllEpisodes(id: bigint) {
-    return this.prisma.episode.findMany({
+    const episodes = await this.prisma.episode.findMany({
       where: { anime_id: id },
       orderBy: { number: 'asc' },
     });
+    if (episodes.length === 0) {
+      throw new NotFoundException(`No episodes found for anime with id ${id}`);
+    }
+    return episodes;
   }
 }
