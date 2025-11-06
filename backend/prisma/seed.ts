@@ -26,6 +26,14 @@ async function main() {
       total_episodes: 26,
     },
   });
+
+  await prisma.episode.create({
+    data: {
+      number: 1,
+      title: 'To You, in 2000 Years: The Fall of Shiganshina, Part 1',
+      anime_id: 1,
+    },
+  });
 }
 
 main()

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import type { Anime } from '@prisma/client';
 
@@ -8,5 +8,27 @@ export class AnimeService {
 
   findAll(): Promise<Anime[]> {
     return this.prisma.anime.findMany();
+  }
+
+  async findById(id: bigint): Promise<Anime> {
+    const anime = await this.prisma.anime.findUnique({ where: { id } });
+    if (!anime) {
+      throw new NotFoundException(`Anime with id ${id} not found`);
+    }
+    return anime;
+  }
+
+  async getTenLastAnimes(): Promise<Anime[]> {
+    return this.prisma.anime.findMany({
+      orderBy: { created_at: 'desc' },
+      take: 10,
+    });
+  }
+
+  async getAllEpisodes(id: bigint) {
+    return this.prisma.episode.findMany({
+      where: { anime_id: id },
+      orderBy: { number: 'asc' },
+    });
   }
 }
