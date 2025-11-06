@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AnimeStatus {
+  ONGOING
+  FINISHED
+  PAUSED
+}
+
+enum UserAnimeStatusEnum {
+  WATCHING
+  COMPLETED
+  DROPPED
+  PLAN_TO_WATCH
+}
+
+model User {
+  id BigInt @id @default(autoincrement())
+  name String
+  email String @unique
+  password_hash String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  favorites Favorite[]
+  episode_progression User_episode_progression[]
+  anime_status User_anime_status[]
+}
+
+model Anime {
+  id BigInt @id @default(autoincrement())
+  name String
+  name_japanese String
+  description String
+  image_url String
+  status AnimeStatus
+  total_episodes Int
+  created_at DateTime @default(now())
+  episodes Episode[]
+  favorites Favorite[]
+  user_status User_anime_status[]
+}
+
+model Episode {
+  id BigInt @id @default(autoincrement())
+  number Int
+  title String
+  aired_at DateTime?
+  anime_id BigInt
+  anime Anime @relation(fields: [anime_id], references: [id])
+  user_progression User_episode_progression[]
+}
+
+
+model Favorite {
+  id BigInt @id @default(autoincrement())
+  user_id BigInt
+  anime_id BigInt
+  user User @relation(fields: [user_id], references: [id])
+  anime Anime @relation(fields: [anime_id], references: [id])
+}
+
+model User_episode_progression {
+  id BigInt @id @default(autoincrement())
+  user_id BigInt
+  episode_id BigInt
+  seen Boolean
+  user User @relation(fields: [user_id], references: [id])
+  episode Episode @relation(fields: [episode_id], references: [id])
+}
+
+model User_anime_status {
+  id BigInt @id @default(autoincrement())
+  user_id BigInt
+  anime_id BigInt
+  status UserAnimeStatusEnum
+  user User @relation(fields: [user_id], references: [id])
+  anime Anime @relation(fields: [anime_id], references: [id])
+}
