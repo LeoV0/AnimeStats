@@ -6,8 +6,13 @@ export class AnimeController {
   constructor(private animeService: AnimeService) {}
 
   @Get()
-  getAllAnimes() {
+  async getAllAnimes() {
     console.log('GET /animes called');
-    return this.animeService.findAll();
+    const animes = await this.animeService.findAll();
+
+    return animes.map((anime) => ({
+      ...anime,
+      id: anime.id.toString(),
+    }));
   }
 }
