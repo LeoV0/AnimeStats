@@ -5,7 +5,8 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService, AnimeProgress } from './user.service';
+
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('users')
@@ -32,7 +33,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id/progress')
-  async getProgressById(@Param('id') id: string) {
+  async getProgressById(@Param('id') id: string): Promise<AnimeProgress[]> {
     const userId = BigInt(id);
     const progress = await this.userService.getProgressById(userId);
 

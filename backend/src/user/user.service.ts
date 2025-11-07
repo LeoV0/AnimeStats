@@ -2,6 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+export interface EpisodeProgress {
+  id: string;
+  number: number;
+  seen: boolean;
+}
+
+export interface AnimeProgress {
+  anime_id: string;
+  anime_name: string;
+  episodes: EpisodeProgress[];
+}
+
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
@@ -18,21 +30,18 @@ export class UserService {
     return user;
   }
 
-  async getProgressById(userId: bigint) {
+  async getProgressById(userId: bigint): Promise<AnimeProgress[]> {
     const watchedEpisodes = await this.prisma.user_episode_progression.findMany(
       {
         where: { user_id: userId },
-        include: {
-          episode: { include: { anime: true } },
-        },
+        include: { episode: { include: { anime: true } } },
       },
     );
 
-    if (!watchedEpisodes.length) {
-      return [];
-    }
+    if (!watchedEpisodes.length) return [];
 
-    const grouped: Record<string, any> = {};
+    const grouped: Record<string, AnimeProgress> = {};
+
     for (const we of watchedEpisodes) {
       const animeId = we.episode.anime.id.toString();
       if (!grouped[animeId]) {
