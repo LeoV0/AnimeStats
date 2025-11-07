@@ -17,4 +17,43 @@ export class UserService {
     }
     return user;
   }
+
+  async getProgressById(userId: bigint) {
+    const watchedEpisodes = await this.prisma.user_episode_progression.findMany(
+      {
+        where: { user_id: userId },
+        include: {
+          episode: { include: { anime: true } },
+        },
+      },
+    );
+
+    if (!watchedEpisodes.length) {
+      return [];
+    }
+
+    const grouped: Record<string, any> = {};
+    for (const we of watchedEpisodes) {
+      const animeId = we.episode.anime.id.toString();
+      if (!grouped[animeId]) {
+        grouped[animeId] = {
+          anime_id: animeId,
+          anime_name: we.episode.anime.name,
+          episodes: [],
+        };
+      }
+
+      grouped[animeId].episodes.push({
+        id: we.episode.id.toString(),
+        number: we.episode.number,
+        seen: we.seen,
+      });
+    }
+
+    for (const anime of Object.values(grouped)) {
+      anime.episodes.sort((a, b) => a.number - b.number);
+    }
+
+    return Object.values(grouped);
+  }
 }
