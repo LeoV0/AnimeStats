@@ -5,9 +5,10 @@ import { AnimeModule } from './anime/anime.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { EpisodesModule } from './episodes/episodes.module';
 
 @Module({
-  imports: [PrismaModule, AnimeModule, AuthModule, UserModule],
+  imports: [PrismaModule, AnimeModule, AuthModule, UserModule, EpisodesModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -80,6 +80,8 @@ model User_episode_progression {
   seen Boolean
   user User @relation(fields: [user_id], references: [id])
   episode Episode @relation(fields: [episode_id], references: [id])
+  
+  @@unique([user_id, episode_id])
 }
 
 model User_anime_status {
