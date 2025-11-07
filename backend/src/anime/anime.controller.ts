@@ -1,6 +1,23 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Post,
+  Req,
+  NotFoundException,
+  Delete,
+} from '@nestjs/common';
 import { AnimeService } from './anime.service';
 import { Param } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import type { Request } from 'express';
+
+interface JwtRequest extends Request {
+  user?: {
+    id: string;
+    email?: string;
+  };
+}
 
 @Controller('animes')
 export class AnimeController {
@@ -46,5 +63,46 @@ export class AnimeController {
       id: episode.id.toString(),
       anime_id: episode.anime_id.toString(),
     }));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/favorites')
+  async addToFavorites(@Param('id') animeId: string, @Req() req: JwtRequest) {
+    if (!req.user || !req.user.id) {
+      throw new NotFoundException('User not authenticated');
+    }
+
+    const userId = BigInt(req.user.id);
+    const animeIdBig = BigInt(animeId);
+
+    await this.animeService.addToFavorites(userId, animeIdBig);
+
+    return {
+      user_id: userId.toString(),
+      anime_id: animeIdBig.toString(),
+      message: 'Favorite added successfully !',
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id/favorites')
+  async removeFromFavorites(
+    @Param('id') animeId: string,
+    @Req() req: JwtRequest,
+  ) {
+    if (!req.user || !req.user.id) {
+      throw new NotFoundException('User not authenticated');
+    }
+
+    const userId = BigInt(req.user.id);
+    const animeIdBig = BigInt(animeId);
+
+    await this.animeService.removeFromFavorites(userId, animeIdBig);
+
+    return {
+      user_id: userId.toString(),
+      anime_id: animeIdBig.toString(),
+      message: 'Favorite removed successfully !',
+    };
   }
 }

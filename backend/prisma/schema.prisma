@@ -69,6 +69,8 @@ model Favorite {
   anime_id BigInt
   user User @relation(fields: [user_id], references: [id])
   anime Anime @relation(fields: [anime_id], references: [id])
+
+  @@unique([user_id, anime_id])
 }
 
 model User_episode_progression {

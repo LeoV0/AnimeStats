@@ -35,4 +35,37 @@ export class AnimeService {
     }
     return episodes;
   }
+
+  async addToFavorites(userId: bigint, animeId: bigint) {
+    const anime = await this.prisma.anime.findUnique({
+      where: { id: animeId },
+    });
+    if (!anime) {
+      throw new NotFoundException(`Anime with ${animeId} not found`);
+    }
+    return this.prisma.favorite.upsert({
+      where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
+      update: {},
+      create: { user_id: userId, anime_id: animeId },
+    });
+  }
+
+  async removeFromFavorites(userId: bigint, animeId: bigint) {
+    const anime = await this.prisma.anime.findUnique({
+      where: { id: animeId },
+    });
+    if (!anime) {
+      throw new NotFoundException(`Anime with ${animeId} not found`);
+    }
+    const favorite = await this.prisma.favorite.findUnique({
+      where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
+    });
+    if (!favorite) {
+      throw new NotFoundException(`Favorite not found for this anime and user`);
+    }
+    const deleted = await this.prisma.favorite.delete({
+      where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
+    });
+    return deleted;
+  }
 }
