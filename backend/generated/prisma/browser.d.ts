@@ -1,0 +1,10 @@
+import * as Prisma from './internal/prismaNamespaceBrowser.js';
+export { Prisma };
+export * as $Enums from './enums.js';
+export * from './enums.js';
+export type User = Prisma.UserModel;
+export type Anime = Prisma.AnimeModel;
+export type Episode = Prisma.EpisodeModel;
+export type Favorite = Prisma.FavoriteModel;
+export type User_episode_progression = Prisma.User_episode_progressionModel;
+export type User_anime_status = Prisma.User_anime_statusModel;
