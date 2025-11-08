@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import type { Anime } from '@prisma/client';
+import { Anime, Episode, Favorite } from '@prisma/client';
 
 @Injectable()
 export class AnimeService {
@@ -18,14 +18,14 @@ export class AnimeService {
     return anime;
   }
 
-  async getTenLastAnimes(): Promise<Anime[]> {
+  getTenLastAnimes(): Promise<Anime[]> {
     return this.prisma.anime.findMany({
       orderBy: { created_at: 'desc' },
       take: 10,
     });
   }
 
-  async getAllEpisodes(id: bigint) {
+  async getAllEpisodes(id: bigint): Promise<Episode[]> {
     const episodes = await this.prisma.episode.findMany({
       where: { anime_id: id },
       orderBy: { number: 'asc' },
@@ -36,12 +36,12 @@ export class AnimeService {
     return episodes;
   }
 
-  async addToFavorites(userId: bigint, animeId: bigint) {
+  async addToFavorites(userId: bigint, animeId: bigint): Promise<Favorite> {
     const anime = await this.prisma.anime.findUnique({
       where: { id: animeId },
     });
     if (!anime) {
-      throw new NotFoundException(`Anime with ${animeId} not found`);
+      throw new NotFoundException(`Anime with id ${animeId} not found`);
     }
     return this.prisma.favorite.upsert({
       where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
@@ -50,22 +50,24 @@ export class AnimeService {
     });
   }
 
-  async removeFromFavorites(userId: bigint, animeId: bigint) {
+  async removeFromFavorites(
+    userId: bigint,
+    animeId: bigint,
+  ): Promise<Favorite> {
     const anime = await this.prisma.anime.findUnique({
       where: { id: animeId },
     });
     if (!anime) {
-      throw new NotFoundException(`Anime with ${animeId} not found`);
+      throw new NotFoundException(`Anime with id ${animeId} not found`);
     }
     const favorite = await this.prisma.favorite.findUnique({
       where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
     });
     if (!favorite) {
-      throw new NotFoundException(`Favorite not found for this anime and user`);
+      throw new NotFoundException(`Favorite not found`);
     }
-    const deleted = await this.prisma.favorite.delete({
+    return this.prisma.favorite.delete({
       where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
     });
-    return deleted;
   }
 }
