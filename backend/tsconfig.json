@@ -25,6 +25,6 @@
     "strict": true,
     "strictPropertyInitialization": false
   },
-  "include": ["src/**/*", "test/**/*", ".eslintrc.js"],
+  "include": ["src/**/*", ".eslintrc.js"],
   "exclude": ["node_modules", "dist"]
 }
