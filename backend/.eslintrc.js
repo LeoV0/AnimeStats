@@ -7,8 +7,9 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   parserOptions: {
-    project: './tsconfig.eslint.json',
+    project: ['./tsconfig.eslint.json'],
     tsconfigRootDir: __dirname,
+    EXACT: false,
   },
   rules: {
     '@typescript-eslint/no-unsafe-assignment': 'error',

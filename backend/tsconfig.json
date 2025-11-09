@@ -21,10 +21,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "rootDir": "./src",
     "strict": true,
     "strictPropertyInitialization": false
   },
-  "include": ["src/**/*", ".eslintrc.js"],
+  "include": ["src/**/*", "test/**/*", ".eslintrc.js"],
   "exclude": ["node_modules", "dist"]
 }
