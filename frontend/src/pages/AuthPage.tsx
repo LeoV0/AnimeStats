@@ -65,21 +65,22 @@ export default function AuthPage({ mode }: AuthPageProps) {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <Card className="w-full max-w-sm">
+    <div className="flex justify-center items-center h-screen bg-black text-white">
+      <Card className="w-full max-w-sm bg-neutral-900 border border-neutral-800 shadow-lg">
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="text-white">
             {mode === "register" ? "Inscrivez-vous" : "Connectez-vous"}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-gray-400">
             {mode === "register"
               ? "Entrez votre nom, votre email et votre mot de passe"
               : "Entrez votre email et votre mot de passe"}
           </CardDescription>
+
           <CardAction>
             {mode === "login" ? (
               <Button
-                className="cursor-pointer"
+                className="cursor-pointer text-white "
                 variant="link"
                 onClick={() => navigate("/register")}
                 disabled={loading}
@@ -88,7 +89,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
               </Button>
             ) : (
               <Button
-                className="cursor-pointer"
+                className="cursor-pointer text-white "
                 variant="link"
                 onClick={() => navigate("/login")}
                 disabled={loading}
@@ -99,11 +100,13 @@ export default function AuthPage({ mode }: AuthPageProps) {
           </CardAction>
         </CardHeader>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <CardContent className="flex flex-col gap-6">
             {mode === "register" && (
               <div className="grid gap-2">
-                <Label htmlFor="name">Nom</Label>
+                <Label htmlFor="name" className="text-gray-300">
+                  Nom
+                </Label>
                 <Input
                   id="name"
                   type="text"
@@ -112,12 +115,15 @@ export default function AuthPage({ mode }: AuthPageProps) {
                   onChange={(e) => setName(e.target.value)}
                   required
                   disabled={loading}
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder-gray-500 "
                 />
               </div>
             )}
 
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-gray-300">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -126,19 +132,23 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                className="bg-neutral-800 border-neutral-700 text-white placeholder-gray-500 "
               />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password" className="text-gray-300">
+                Mot de passe
+              </Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="•••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                className="bg-neutral-800 border-neutral-700 text-white placeholder-gray-500 "
               />
             </div>
           </CardContent>
@@ -147,7 +157,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
             <Button
               type="submit"
               variant="outline"
-              className="w-full cursor-pointer transition-colors duration-500 ease-in-out hover:bg-black hover:text-white"
+              className="w-full cursor-pointer bg-white text-black font-medium rounded-xl transition-all duration-300 hover:bg-black hover:text-white border border-black/10 hover:border-black backdrop-blur-sm hover:shadow-[0_0_30px_rgba(0,0,0,0.3)]"
               disabled={loading}
             >
               {loading
