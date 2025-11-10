@@ -65,8 +65,10 @@ export default function AuthPage({ mode }: AuthPageProps) {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black text-white">
-      <Card className="w-full max-w-sm bg-neutral-900 border border-neutral-800 shadow-lg">
+    <div className="relative flex justify-center items-center min-h-screen w-screen overflow-hidden bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white p-8">
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-transparent to-black opacity-40"></div>
+
+      <Card className="relative z-10 w-full max-w-sm border shadow-lg bg-neutral-900 border-neutral-800">
         <CardHeader>
           <CardTitle className="text-white">
             {mode === "register" ? "Inscrivez-vous" : "Connectez-vous"}
@@ -80,7 +82,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
           <CardAction>
             {mode === "login" ? (
               <Button
-                className="cursor-pointer text-white "
+                className="text-white cursor-pointer"
                 variant="link"
                 onClick={() => navigate("/register")}
                 disabled={loading}
@@ -89,7 +91,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
               </Button>
             ) : (
               <Button
-                className="cursor-pointer text-white "
+                className="text-white cursor-pointer"
                 variant="link"
                 onClick={() => navigate("/login")}
                 disabled={loading}
@@ -115,7 +117,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                   onChange={(e) => setName(e.target.value)}
                   required
                   disabled={loading}
-                  className="bg-neutral-800 border-neutral-700 text-white placeholder-gray-500 "
+                  className="text-white placeholder-gray-500 bg-neutral-800 border-neutral-700"
                 />
               </div>
             )}
@@ -132,7 +134,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
-                className="bg-neutral-800 border-neutral-700 text-white placeholder-gray-500 "
+                className="text-white placeholder-gray-500 bg-neutral-800 border-neutral-700"
               />
             </div>
 
@@ -148,7 +150,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
-                className="bg-neutral-800 border-neutral-700 text-white placeholder-gray-500 "
+                className="text-white placeholder-gray-500 bg-neutral-800 border-neutral-700"
               />
             </div>
           </CardContent>
