@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Scene } from "@/components/hero-section";
 import Page1 from "@/components/glow-menu";
 import JapaneseSection from "@/components/JapaneseSection";
+import AnimeList from "@/components/AnimeList";
 
 const features = [
   {
@@ -62,9 +63,11 @@ const HomePage = () => {
                   S'inscrire
                 </Button>
               </Link>
-              <Button className="px-8 py-3 text-sm text-white transition-all duration-300 bg-transparent border cursor-pointer rounded-xl border-white/20 hover:bg-white/10">
-                Explorer les Animés
-              </Button>
+              <a href="#animes">
+                <Button className="px-8 py-3 text-sm text-white transition-all duration-300 bg-transparent border cursor-pointer rounded-xl border-white/20 hover:bg-white/10">
+                  Explorer les Animés
+                </Button>
+              </a>
             </div>
           </div>
 
@@ -92,6 +95,10 @@ const HomePage = () => {
 
       <div className="relative z-10 py-16">
         <JapaneseSection />
+      </div>
+
+      <div id="animes" className="relative z-10 flex justify-center py-2">
+        <AnimeList />
       </div>
     </div>
   );
