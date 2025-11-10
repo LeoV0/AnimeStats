@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tv, Bookmark, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Scene } from "@/components/hero-section";
+import Page1 from "@/components/glow-menu";
 
 const features = [
   {
@@ -30,7 +31,13 @@ const HomePage = () => {
         <Scene />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center w-full max-w-6xl space-y-12">
+      <div className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none top-4">
+        <div className="w-full max-w-6xl px-6 pointer-events-auto">
+          <Page1 />
+        </div>
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center w-full max-w-6xl space-y-12 pt-15">
         <div className="flex flex-col items-center space-y-6 text-center">
           <Badge
             variant="secondary"
@@ -49,11 +56,11 @@ const HomePage = () => {
 
           <div className="flex flex-col items-center gap-4 sm:flex-row">
             <Link to="/register">
-              <Button className="px-8 py-3 text-sm text-black transition-all duration-300 bg-white border rounded-xl border-white/10 hover:bg-white/90">
+              <Button className="px-8 py-3 text-sm text-black transition-all duration-300 bg-white border cursor-pointer rounded-xl border-white/10 hover:bg-white/90">
                 S'inscrire
               </Button>
             </Link>
-            <Button className="px-8 py-3 text-sm text-white transition-all duration-300 bg-transparent border rounded-xl border-white/20 hover:bg-white/10">
+            <Button className="px-8 py-3 text-sm text-white transition-all duration-300 bg-transparent border cursor-pointer rounded-xl border-white/20 hover:bg-white/10">
               Explorer les Animés
             </Button>
           </div>
@@ -63,7 +70,7 @@ const HomePage = () => {
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-start justify-start w-full h-40 max-w-xs p-4 space-y-2 transition-transform duration-300 border backdrop-blur-sm bg-white/5 border-white/10 rounded-xl md:p-6 md:h-48 md:space-y-3 hover:scale-105"
+              className="flex flex-col items-start justify-start w-full h-40 max-w-xs p-4 space-y-2 transition-transform duration-300 border backdrop-blur-sm bg-white/5 border-white/10 rounded-xl md:p-6 md:h-48 md:space-y-3 "
             >
               <feature.icon size={28} className="text-white/80 md:w-6 md:h-6" />
               <h3 className="text-base font-medium md:text-lg">
