@@ -27,7 +27,7 @@ const features = [
 
 const HomePage = () => {
   return (
-    <div className="relative w-screen bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white">
+    <div className="relative w-full bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white ">
       <div className="absolute inset-0 z-0 h-screen pointer-events-none opacity-70">
         <Scene />
       </div>
