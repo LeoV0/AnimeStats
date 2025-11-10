@@ -4,6 +4,7 @@ import { Tv, Bookmark, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Scene } from "@/components/hero-section";
 import Page1 from "@/components/glow-menu";
+import JapaneseSection from "@/components/JapaneseSection";
 
 const features = [
   {
@@ -26,8 +27,8 @@ const features = [
 
 const HomePage = () => {
   return (
-    <div className="relative min-h-screen w-screen overflow-hidden bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white flex flex-col items-center justify-center p-6 sm:p-8">
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-70">
+    <div className="relative w-screen bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white">
+      <div className="absolute inset-0 z-0 h-screen pointer-events-none opacity-70">
         <Scene />
       </div>
 
@@ -37,49 +38,60 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center w-full max-w-6xl space-y-12 pt-15">
-        <div className="flex flex-col items-center space-y-6 text-center">
-          <Badge
-            variant="secondary"
-            className="px-4 py-2 text-white transition-all duration-300 border rounded-full backdrop-blur-sm bg-white/10 border-white/20 hover:bg-white/20"
-          >
-            YumeTrack • Suis. Découvre. Profite.
-          </Badge>
+      <div className="relative flex flex-col items-center justify-center min-h-screen p-6 sm:p-8">
+        <div className="relative z-10 flex flex-col items-center w-full max-w-6xl space-y-12 pt-15">
+          <div className="flex flex-col items-center space-y-6 text-center">
+            <Badge
+              variant="secondary"
+              className="px-4 py-2 text-white transition-all duration-300 border rounded-full backdrop-blur-sm bg-white/10 border-white/20 hover:bg-white/20"
+            >
+              YumeTrack • Suis. Découvre. Profite.
+            </Badge>
 
-          <h1 className="max-w-3xl text-3xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
-            Ton univers animé, centralisé en un seul endroit.
-          </h1>
-          <p className="max-w-2xl text-lg text-neutral-300">
-            Garde une trace de tout ce que tu regardes et découvre les nouvelles
-            sorties.
-          </p>
+            <h1 className="max-w-3xl text-3xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
+              Ton univers animé, centralisé en un seul endroit.
+            </h1>
+            <p className="max-w-2xl text-lg text-neutral-300">
+              Garde une trace de tout ce que tu regardes et découvre les
+              nouvelles sorties.
+            </p>
 
-          <div className="flex flex-col items-center gap-4 sm:flex-row">
-            <Link to="/register">
-              <Button className="px-8 py-3 text-sm text-black transition-all duration-300 bg-white border cursor-pointer rounded-xl border-white/10 hover:bg-white/90">
-                S'inscrire
+            <div className="flex flex-col items-center gap-4 sm:flex-row">
+              <Link to="/register">
+                <Button className="px-8 py-3 text-sm text-black transition-all duration-300 bg-white border cursor-pointer rounded-xl border-white/10 hover:bg-white/90">
+                  S'inscrire
+                </Button>
+              </Link>
+              <Button className="px-8 py-3 text-sm text-white transition-all duration-300 bg-transparent border cursor-pointer rounded-xl border-white/20 hover:bg-white/10">
+                Explorer les Animés
               </Button>
-            </Link>
-            <Button className="px-8 py-3 text-sm text-white transition-all duration-300 bg-transparent border cursor-pointer rounded-xl border-white/20 hover:bg-white/10">
-              Explorer les Animés
-            </Button>
+            </div>
+          </div>
+
+          <div className="grid w-full max-w-4xl grid-cols-1 gap-6 mx-auto sm:grid-cols-2 md:grid-cols-3 justify-items-center">
+            {features.map((feature, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col items-start justify-start w-full h-40 max-w-xs p-4 space-y-2 transition-transform duration-300 border backdrop-blur-sm bg-white/5 border-white/10 rounded-xl md:p-6 md:h-48 md:space-y-3 "
+              >
+                <feature.icon
+                  size={28}
+                  className="text-white/80 md:w-6 md:h-6"
+                />
+                <h3 className="text-base font-medium md:text-lg">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-neutral-400">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        <div className="grid w-full max-w-4xl grid-cols-1 gap-6 mx-auto sm:grid-cols-2 md:grid-cols-3 justify-items-center">
-          {features.map((feature, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col items-start justify-start w-full h-40 max-w-xs p-4 space-y-2 transition-transform duration-300 border backdrop-blur-sm bg-white/5 border-white/10 rounded-xl md:p-6 md:h-48 md:space-y-3 "
-            >
-              <feature.icon size={28} className="text-white/80 md:w-6 md:h-6" />
-              <h3 className="text-base font-medium md:text-lg">
-                {feature.title}
-              </h3>
-              <p className="text-sm text-neutral-400">{feature.description}</p>
-            </div>
-          ))}
-        </div>
+      <div className="relative z-10 py-16">
+        <JapaneseSection />
       </div>
     </div>
   );
