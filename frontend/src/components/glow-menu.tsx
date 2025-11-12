@@ -2,43 +2,9 @@
 
 import type * as React from "react";
 import { motion } from "framer-motion";
-import { Home, User, Moon, Sun, Bookmark, Compass } from "lucide-react";
+import { Home, User, Bookmark, Compass } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Switch } from "@/components/ui/switch";
 import { ThemeProvider } from "next-themes";
-
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-
-  return (
-    <div className="flex items-center space-x-2 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-      <Sun
-        className={`h-[1.2rem] w-[1.2rem] transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-          theme === "dark"
-            ? "text-[#A1A1AA] scale-75 rotate-12"
-            : "text-foreground scale-100 rotate-0"
-        }`}
-      />
-      <Switch
-        checked={theme === "dark"}
-        onCheckedChange={toggleTheme}
-        aria-label="Toggle theme"
-        className="transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110"
-      />
-      <Moon
-        className={`h-[1.2rem] w-[1.2rem] transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-          theme === "light"
-            ? "text-[#A1A1AA] scale-75 rotate-12"
-            : "text-foreground scale-100 rotate-0"
-        }`}
-      />
-    </div>
-  );
-}
 
 interface MenuItem {
   icon: React.ReactNode;
@@ -68,7 +34,7 @@ const menuItems: MenuItem[] = [
   {
     icon: <Bookmark className="w-5 h-5" />,
     label: "Mes Favoris",
-    href: "#",
+    href: "/favorites",
     gradient:
       "radial-gradient(circle, rgba(34,197,94,0.15) 0%, rgba(22,163,74,0.06) 50%, rgba(21,128,61,0) 100%)",
     iconColor: "text-green-500",

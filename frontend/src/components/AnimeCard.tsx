@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
 import { Tilt } from "@/components/ui/tilt";
 import { Toggle } from "@/components/ui/toggle";
 import { Bookmark } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useFavorites } from "@/context/useFavorites";
 
 interface AnimeCardProps {
   id: string;
@@ -14,8 +14,8 @@ interface AnimeCardProps {
   description: string;
   image: string;
   isFavorite?: boolean;
-  onToggleFavorite?: (state: boolean) => void;
   showFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
 export default function AnimeCard({
@@ -23,25 +23,21 @@ export default function AnimeCard({
   title,
   description,
   image,
-  isFavorite = false,
-  onToggleFavorite,
+  isFavorite: propIsFavorite,
   showFavorite,
+  onToggleFavorite,
 }: AnimeCardProps) {
-  const [favorite, setFavorite] = React.useState(isFavorite);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
-  useEffect(() => {
-    console.log(`AnimeCard ${title} - isFavorite reçu:`, isFavorite);
-    setFavorite(isFavorite);
-  }, [isFavorite]);
+  const currentFavorite = propIsFavorite ?? isFavorite(id);
 
   const handleToggle = async () => {
-    const newState = !favorite;
-    setFavorite(newState);
+    const newState = !currentFavorite;
     try {
-      if (onToggleFavorite) await onToggleFavorite(newState);
+      await toggleFavorite(id, newState);
+      onToggleFavorite?.();
     } catch (err) {
       console.error("Erreur favori :", err);
-      setFavorite(!newState);
     }
   };
 
@@ -67,14 +63,15 @@ export default function AnimeCard({
           </h3>
           {showFavorite && (
             <Toggle
-              pressed={favorite}
+              pressed={currentFavorite}
               onPressedChange={handleToggle}
-              aria-label="Ajouter aux favoris"
               className="p-1 rounded-full cursor-pointer bg-white/10 hover:bg-white/20"
             >
               <Bookmark
-                className={`w-5 h-5  transition-colors ${
-                  favorite ? "fill-yellow-400 text-yellow-400" : "text-white"
+                className={`w-5 h-5 transition-colors ${
+                  currentFavorite
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-white"
                 }`}
               />
             </Toggle>

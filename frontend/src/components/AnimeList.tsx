@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
+import { useFavorites } from "@/context/useFavorites";
 
 interface Anime {
   id: string;
@@ -14,6 +15,7 @@ interface Anime {
 export default function AnimeList() {
   const [animes, setAnimes] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isFavorite, toggleFavorite, refreshFavorites } = useFavorites();
 
   useEffect(() => {
     async function fetchAnimes() {
@@ -22,33 +24,42 @@ export default function AnimeList() {
           credentials: "include",
         });
         const data = await res.json();
-        console.log("Liste des animés : ", data);
         setAnimes(data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des animes :", error);
+        console.error("Erreur :", error);
       } finally {
         setLoading(false);
+        refreshFavorites();
       }
     }
-
     fetchAnimes();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center w-full h-64 text-neutral-400">
-        Chargement des animés...
-      </div>
-    );
-  }
+  const handleToggle = async (animeId: string) => {
+    const current = isFavorite(animeId);
+    const newState = !current;
+    try {
+      await toggleFavorite(animeId, newState);
+      setAnimes((prev) =>
+        prev.map((a) => (a.id === animeId ? { ...a, isFavorite: newState } : a))
+      );
+    } catch (err) {
+      console.error("Erreur favori :", err);
+    }
+  };
 
-  if (!animes.length) {
+  if (loading)
     return (
       <div className="flex items-center justify-center w-full h-64 text-neutral-400">
-        Aucun animé trouvé
+        Chargement...
       </div>
     );
-  }
+  if (!animes.length)
+    return (
+      <div className="flex items-center justify-center w-full h-64 text-neutral-400">
+        Aucun animé
+      </div>
+    );
 
   return (
     <div className="grid grid-cols-1 gap-8 py-16 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-items-center">
@@ -59,32 +70,9 @@ export default function AnimeList() {
           title={anime.name}
           description={anime.description}
           image={anime.image_url}
-          isFavorite={anime.isFavorite}
+          isFavorite={isFavorite(anime.id)}
           showFavorite={true}
-          onToggleFavorite={async (fav) => {
-            setAnimes((prev) =>
-              prev.map((a) =>
-                a.id === anime.id ? { ...a, isFavorite: fav } : a
-              )
-            );
-
-            try {
-              await fetch(
-                `http://localhost:3000/animes/${anime.id}/favorites`,
-                {
-                  method: fav ? "POST" : "DELETE",
-                  credentials: "include",
-                }
-              );
-            } catch (err) {
-              console.error("Erreur favori :", err);
-              setAnimes((prev) =>
-                prev.map((a) =>
-                  a.id === anime.id ? { ...a, isFavorite: !fav } : a
-                )
-              );
-            }
-          }}
+          onToggleFavorite={() => handleToggle(anime.id)}
         />
       ))}
     </div>
