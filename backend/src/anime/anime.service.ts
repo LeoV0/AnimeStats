@@ -10,6 +10,13 @@ export class AnimeService {
     return this.prisma.anime.findMany();
   }
 
+  async isFavorite(userId: bigint, animeId: bigint): Promise<boolean> {
+    const fav = await this.prisma.favorite.findUnique({
+      where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
+    });
+    return !!fav;
+  }
+
   async findById(id: bigint): Promise<Anime> {
     const anime = await this.prisma.anime.findUnique({ where: { id } });
     if (!anime) {
@@ -40,14 +47,19 @@ export class AnimeService {
     const anime = await this.prisma.anime.findUnique({
       where: { id: animeId },
     });
-    if (!anime) {
-      throw new NotFoundException(`Anime with id ${animeId} not found`);
+    if (!anime) throw new NotFoundException(`Anime ${animeId} not found`);
+
+    try {
+      return await this.prisma.favorite.create({
+        data: { user_id: userId, anime_id: animeId },
+      });
+    } catch {
+      const existing = await this.prisma.favorite.findUnique({
+        where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
+      });
+      if (!existing) throw new Error('Impossible de créer le favori');
+      return existing;
     }
-    return this.prisma.favorite.upsert({
-      where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
-      update: {},
-      create: { user_id: userId, anime_id: animeId },
-    });
   }
 
   async removeFromFavorites(
@@ -68,6 +80,15 @@ export class AnimeService {
     }
     return this.prisma.favorite.delete({
       where: { user_id_anime_id: { user_id: userId, anime_id: animeId } },
+    });
+  }
+
+  async getUserFavorites(
+    userId: bigint,
+  ): Promise<(Favorite & { anime: Anime })[]> {
+    return this.prisma.favorite.findMany({
+      where: { user_id: userId },
+      include: { anime: true },
     });
   }
 }

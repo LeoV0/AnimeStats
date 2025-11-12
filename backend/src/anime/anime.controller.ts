@@ -11,6 +11,7 @@ import { AnimeService } from './anime.service';
 import { Param } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import type { Request } from 'express';
+import { OptionalJwtAuthGuard } from 'src/auth/optional-jwt-auth.guard';
 
 interface JwtRequest extends Request {
   user?: {
@@ -23,15 +24,25 @@ interface JwtRequest extends Request {
 export class AnimeController {
   constructor(private animeService: AnimeService) {}
 
+  @UseGuards(OptionalJwtAuthGuard)
   @Get()
-  async getAllAnimes() {
+  async getAllAnimes(@Req() req: JwtRequest) {
     console.log('GET /animes called');
+    console.log('User in request:', req.user);
     const animes = await this.animeService.findAll();
+    const userId = req.user ? BigInt(req.user.id) : null;
 
-    return animes.map((anime) => ({
-      ...anime,
-      id: anime.id.toString(),
-    }));
+    const result = await Promise.all(
+      animes.map(async (anime) => ({
+        ...anime,
+        id: anime.id.toString(),
+        isFavorite: userId
+          ? !!(await this.animeService.isFavorite(userId, anime.id))
+          : false,
+      })),
+    );
+
+    return result;
   }
 
   @Get('latest')
@@ -44,13 +55,33 @@ export class AnimeController {
     }));
   }
 
-  @Get(':id')
-  async getAnimeById(@Param('id') id: string) {
-    const anime = await this.animeService.findById(BigInt(id));
+  @UseGuards(JwtAuthGuard)
+  @Get('favorites')
+  async getUserFavorites(@Req() req: JwtRequest) {
+    if (!req.user || !req.user.id) {
+      throw new NotFoundException('User not authenticated');
+    }
+    const userId = BigInt(req.user.id);
+    const favorites = await this.animeService.getUserFavorites(userId);
 
+    return favorites.map((fav) => ({
+      ...fav.anime,
+      id: fav.anime.id.toString(),
+    }));
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @Get(':id')
+  async getAnimeById(@Param('id') id: string, @Req() req: JwtRequest) {
+    const anime = await this.animeService.findById(BigInt(id));
+    const userId = req.user ? BigInt(req.user.id) : null;
+    const isFav = userId
+      ? !!(await this.animeService.isFavorite(userId, anime.id))
+      : false;
     return {
       ...anime,
       id: anime.id.toString(),
+      isFavorite: isFav,
     };
   }
 

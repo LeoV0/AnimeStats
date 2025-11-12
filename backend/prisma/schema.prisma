@@ -64,13 +64,12 @@ model Episode {
 
 
 model Favorite {
-  id BigInt @id @default(autoincrement())
   user_id BigInt
   anime_id BigInt
   user User @relation(fields: [user_id], references: [id])
   anime Anime @relation(fields: [anime_id], references: [id])
 
-  @@unique([user_id, anime_id])
+  @@id([user_id, anime_id])
 }
 
 model User_episode_progression {

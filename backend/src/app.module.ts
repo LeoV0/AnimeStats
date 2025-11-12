@@ -6,9 +6,17 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { EpisodesModule } from './episodes/episodes.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [PrismaModule, AnimeModule, AuthModule, UserModule, EpisodesModule],
+  imports: [
+    PassportModule,
+    PrismaModule,
+    AnimeModule,
+    AuthModule,
+    UserModule,
+    EpisodesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

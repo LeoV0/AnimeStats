@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Tilt } from "@/components/ui/tilt";
 import { Toggle } from "@/components/ui/toggle";
 import { Bookmark } from "lucide-react";
@@ -15,6 +15,7 @@ interface AnimeCardProps {
   image: string;
   isFavorite?: boolean;
   onToggleFavorite?: (state: boolean) => void;
+  showFavorite?: boolean;
 }
 
 export default function AnimeCard({
@@ -24,18 +25,29 @@ export default function AnimeCard({
   image,
   isFavorite = false,
   onToggleFavorite,
+  showFavorite,
 }: AnimeCardProps) {
   const [favorite, setFavorite] = React.useState(isFavorite);
 
-  const handleToggle = () => {
+  useEffect(() => {
+    console.log(`AnimeCard ${title} - isFavorite reçu:`, isFavorite);
+    setFavorite(isFavorite);
+  }, [isFavorite]);
+
+  const handleToggle = async () => {
     const newState = !favorite;
     setFavorite(newState);
-    onToggleFavorite?.(newState);
+    try {
+      if (onToggleFavorite) await onToggleFavorite(newState);
+    } catch (err) {
+      console.error("Erreur favori :", err);
+      setFavorite(!newState);
+    }
   };
 
   return (
     <Tilt
-      rotationFactor={15}
+      rotationFactor={20}
       className="relative group w-[280px] h-[400px] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-lg transition-all hover:shadow-xl"
     >
       <motion.img
@@ -53,18 +65,20 @@ export default function AnimeCard({
           <h3 className="text-lg font-semibold text-white line-clamp-2">
             {title}
           </h3>
-          <Toggle
-            pressed={favorite}
-            onPressedChange={handleToggle}
-            aria-label="Ajouter aux favoris"
-            className="p-1 rounded-full cursor-pointer bg-white/10 hover:bg-white/20"
-          >
-            <Bookmark
-              className={`w-5 h-5  transition-colors ${
-                favorite ? "fill-yellow-400 text-yellow-400" : "text-white"
-              }`}
-            />
-          </Toggle>
+          {showFavorite && (
+            <Toggle
+              pressed={favorite}
+              onPressedChange={handleToggle}
+              aria-label="Ajouter aux favoris"
+              className="p-1 rounded-full cursor-pointer bg-white/10 hover:bg-white/20"
+            >
+              <Bookmark
+                className={`w-5 h-5  transition-colors ${
+                  favorite ? "fill-yellow-400 text-yellow-400" : "text-white"
+                }`}
+              />
+            </Toggle>
+          )}
         </div>
 
         <p className="text-sm text-neutral-300 line-clamp-3">{description}</p>

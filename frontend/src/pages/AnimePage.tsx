@@ -51,10 +51,32 @@ export default function AnimePage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = async () => {
+    if (!anime) return;
+
     const newState = !favorite;
+
     setFavorite(newState);
-    console.log(`${anime?.name} est ${newState ? "favori" : "non favori"}`);
+    setAnime((prev) => (prev ? { ...prev, isFavorite: newState } : prev));
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/animes/${anime.id}/favorites`,
+        {
+          method: newState ? "POST" : "DELETE",
+          credentials: "include",
+        }
+      );
+      console.log("Response status:", response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (err) {
+      console.error("Erreur favori :", err);
+      setFavorite(!newState);
+      setAnime((prev) => (prev ? { ...prev, isFavorite: !newState } : prev));
+    }
   };
 
   const toggleSeen = (epId: string) => {

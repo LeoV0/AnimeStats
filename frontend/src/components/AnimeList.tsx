@@ -18,8 +18,11 @@ export default function AnimeList() {
   useEffect(() => {
     async function fetchAnimes() {
       try {
-        const res = await fetch("http://localhost:3000/animes");
+        const res = await fetch("http://localhost:3000/animes", {
+          credentials: "include",
+        });
         const data = await res.json();
+        console.log("Liste des animés : ", data);
         setAnimes(data);
       } catch (error) {
         console.error("Erreur lors de la récupération des animes :", error);
@@ -56,11 +59,32 @@ export default function AnimeList() {
           title={anime.name}
           description={anime.description}
           image={anime.image_url}
-          onToggleFavorite={(fav) =>
-            console.log(
-              `${anime.name} → ${fav ? "ajouté" : "retiré"} des favoris`
-            )
-          }
+          isFavorite={anime.isFavorite}
+          showFavorite={true}
+          onToggleFavorite={async (fav) => {
+            setAnimes((prev) =>
+              prev.map((a) =>
+                a.id === anime.id ? { ...a, isFavorite: fav } : a
+              )
+            );
+
+            try {
+              await fetch(
+                `http://localhost:3000/animes/${anime.id}/favorites`,
+                {
+                  method: fav ? "POST" : "DELETE",
+                  credentials: "include",
+                }
+              );
+            } catch (err) {
+              console.error("Erreur favori :", err);
+              setAnimes((prev) =>
+                prev.map((a) =>
+                  a.id === anime.id ? { ...a, isFavorite: !fav } : a
+                )
+              );
+            }
+          }}
         />
       ))}
     </div>
