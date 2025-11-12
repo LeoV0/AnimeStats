@@ -60,6 +60,8 @@ model Episode {
   anime_id BigInt
   anime Anime @relation(fields: [anime_id], references: [id])
   user_progression User_episode_progression[]
+
+  @@unique([anime_id, number])
 }
 
 
