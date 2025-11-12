@@ -23,7 +23,7 @@
     "noFallthroughCasesInSwitch": false,
     "strict": true,
     "strictPropertyInitialization": false,
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "include": ["src/**/*", "test/**/*", ".eslintrc.js"],
   "exclude": ["node_modules", "dist"]
