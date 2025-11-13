@@ -6,6 +6,7 @@ import {
   Req,
   NotFoundException,
   Delete,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AnimeService } from './anime.service';
 import { Param } from '@nestjs/common';
@@ -43,6 +44,17 @@ export class AnimeController {
     );
 
     return result;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('in-progress')
+  async getInProgress(@Req() req: JwtRequest) {
+    if (!req.user?.id) {
+      throw new UnauthorizedException('Utilisateur non authentifié');
+    }
+
+    const userId = BigInt(req.user.id);
+    return this.animeService.getInProgress(userId);
   }
 
   @Get('latest')

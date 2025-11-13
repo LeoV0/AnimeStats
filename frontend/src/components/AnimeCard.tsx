@@ -15,6 +15,8 @@ interface AnimeCardProps {
   image: string;
   isFavorite?: boolean;
   showFavorite?: boolean;
+  badge?: React.ReactNode;
+  progress?: string;
   onToggleFavorite?: () => void;
 }
 
@@ -25,6 +27,8 @@ export default function AnimeCard({
   image,
   isFavorite: propIsFavorite,
   showFavorite,
+  badge,
+  progress,
   onToggleFavorite,
 }: AnimeCardProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -56,11 +60,14 @@ export default function AnimeCard({
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
+      {badge && <div className="absolute z-10 top-3 left-3">{badge}</div>}
+
       <div className="absolute bottom-0 left-0 right-0 flex flex-col p-4 space-y-3">
         <div className="flex items-start justify-between">
           <h3 className="text-lg font-semibold text-white line-clamp-2">
             {title}
           </h3>
+          {progress && <p className="mt-1 text-xs text-white">{progress}</p>}
           {showFavorite && (
             <Toggle
               pressed={currentFavorite}

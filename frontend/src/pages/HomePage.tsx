@@ -6,6 +6,7 @@ import { Scene } from "@/components/hero-section";
 import Page1 from "@/components/glow-menu";
 import JapaneseSection from "@/components/JapaneseSection";
 import AnimeList from "@/components/AnimeList";
+import InProgressSection from "@/components/InProgressSection";
 
 const features = [
   {
@@ -93,12 +94,14 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="relative z-10 py-16">
-        <JapaneseSection />
-      </div>
-
-      <div id="animes" className="relative z-10 flex justify-center py-2">
-        <AnimeList />
+      <div id="animes" className="relative z-10 py-16">
+        <div className="px-6 mx-auto space-y-24 max-w-7xl">
+          <InProgressSection />
+          <div>
+            <JapaneseSection />
+            <AnimeList />
+          </div>
+        </div>
       </div>
     </div>
   );

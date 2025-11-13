@@ -55,6 +55,39 @@ export class AnimeService {
     }));
   }
 
+  async getInProgress(userId: bigint) {
+    const animes = await this.prisma.anime.findMany({
+      where: {
+        episodes: {
+          some: {
+            user_progression: {
+              some: { user_id: userId, seen: true },
+            },
+          },
+        },
+      },
+      include: {
+        episodes: {
+          where: {
+            user_progression: { some: { user_id: userId, seen: true } },
+          },
+          select: { number: true },
+          orderBy: { number: 'desc' },
+          take: 1,
+        },
+      },
+      take: 6,
+    });
+
+    return animes.map((a) => ({
+      id: a.id.toString(),
+      name: a.name,
+      name_japanese: a.name_japanese,
+      image_url: a.image_url,
+      lastSeenEpisode: a.episodes[0]?.number || 1,
+    }));
+  }
+
   async addToFavorites(userId: bigint, animeId: bigint): Promise<Favorite> {
     const anime = await this.prisma.anime.findUnique({
       where: { id: animeId },

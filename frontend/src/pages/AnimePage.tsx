@@ -85,8 +85,10 @@ export default function AnimePage() {
         method: wasSeen ? "DELETE" : "POST",
         credentials: "include",
       });
+
+      window.dispatchEvent(new Event("in-progress-updated"));
     } catch (error) {
-      console.error("Erreur épisode : ", error);
+      console.error("Erreur vue épisode :", error);
       setEpisodes((prev) =>
         prev.map((ep) => (ep.id === epId ? { ...ep, seen: wasSeen } : ep))
       );
