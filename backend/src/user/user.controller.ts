@@ -4,10 +4,18 @@ import {
   NotFoundException,
   Param,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService, AnimeProgress } from './user.service';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+interface JwtRequest extends Request {
+  user?: {
+    id: string;
+    email?: string;
+  };
+}
 
 @Controller('users')
 export class UserController {
@@ -20,6 +28,22 @@ export class UserController {
       ...user,
       id: user.id.toString(),
     }));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async getCurrentUser(@Req() req: JwtRequest) {
+    if (!req.user?.id) {
+      throw new NotFoundException('User not authenticated');
+    }
+
+    const user = await this.userService.findById(BigInt(req.user.id));
+
+    return {
+      id: user.id.toString(),
+      name: user.name,
+      email: user.email,
+    };
   }
 
   @Get(':id')
