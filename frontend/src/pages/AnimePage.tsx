@@ -71,10 +71,26 @@ export default function AnimePage() {
     }
   };
 
-  const toggleSeen = (epId: string) => {
+  const toggleSeen = async (epId: string) => {
+    const current = episodes.find((ep) => ep.id === epId);
+    if (!current) return;
+    const wasSeen = current.seen;
+
     setEpisodes((prev) =>
-      prev.map((ep) => (ep.id === epId ? { ...ep, seen: !ep.seen } : ep))
+      prev.map((ep) => (ep.id === epId ? { ...ep, seen: !wasSeen } : ep))
     );
+
+    try {
+      await fetch(`http://localhost:3000/episodes/${epId}/watched`, {
+        method: wasSeen ? "DELETE" : "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Erreur épisode : ", error);
+      setEpisodes((prev) =>
+        prev.map((ep) => (ep.id === epId ? { ...ep, seen: wasSeen } : ep))
+      );
+    }
   };
 
   return (
@@ -161,16 +177,18 @@ export default function AnimePage() {
             )}
           </div>
 
-          <div className="relative flex items-center justify-center flex-1 mt-6 md:mt-0">
+          <div className="relative flex justify-center flex-1 mt-0 md:mt-0">
             {loading ? (
               <div className="w-full max-w-[400px] h-96 bg-white/5 rounded-xl" />
             ) : (
               anime && (
-                <img
-                  src={anime.image_url}
-                  alt={anime.name}
-                  className="w-full max-w-[400px] md:max-w-full h-auto rounded-xl object-cover"
-                />
+                <div className="relative  w-full max-w-[400px] rounded-xl overflow-hidden shadow-lg">
+                  <img
+                    src={anime.image_url}
+                    alt={anime.name}
+                    className="object-cover w-full h-auto rounded-xl"
+                  />
+                </div>
               )
             )}
           </div>

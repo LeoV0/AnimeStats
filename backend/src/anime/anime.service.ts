@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Anime, Episode, Favorite } from '@prisma/client';
+import { Anime, Favorite } from '@prisma/client';
 
 @Injectable()
 export class AnimeService {
@@ -32,15 +32,27 @@ export class AnimeService {
     });
   }
 
-  async getAllEpisodes(id: bigint): Promise<Episode[]> {
+  async getAllEpisodes(animeId: bigint, userId?: bigint): Promise<any[]> {
     const episodes = await this.prisma.episode.findMany({
-      where: { anime_id: id },
+      where: { anime_id: animeId },
       orderBy: { number: 'asc' },
+      include: {
+        user_progression: userId
+          ? {
+              where: { user_id: userId },
+              select: { seen: true },
+            }
+          : undefined,
+      },
     });
-    if (episodes.length === 0) {
-      throw new NotFoundException(`No episodes found for anime with id ${id}`);
-    }
-    return episodes;
+
+    return episodes.map((ep) => ({
+      id: ep.id.toString(),
+      number: ep.number,
+      title: ep.title,
+      anime_id: ep.anime_id.toString(),
+      seen: !!(ep.user_progression && ep.user_progression[0]?.seen),
+    }));
   }
 
   async addToFavorites(userId: bigint, animeId: bigint): Promise<Favorite> {

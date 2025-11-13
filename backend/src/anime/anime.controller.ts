@@ -85,15 +85,11 @@ export class AnimeController {
     };
   }
 
+  @UseGuards(OptionalJwtAuthGuard)
   @Get(':id/episodes')
-  async getAllEpisodes(@Param('id') id: string) {
-    const episodes = await this.animeService.getAllEpisodes(BigInt(id));
-
-    return episodes.map((episode) => ({
-      ...episode,
-      id: episode.id.toString(),
-      anime_id: episode.anime_id.toString(),
-    }));
+  async getAllEpisodes(@Param('id') id: string, @Req() req: JwtRequest) {
+    const userId = req.user ? BigInt(req.user.id) : undefined;
+    return this.animeService.getAllEpisodes(BigInt(id), userId);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,4 +1,4 @@
-// contexts/FavoritesContext.tsx
+// context/FavoritesContext.tsx
 import { createContext, type ReactNode } from "react";
 import { useFavorites } from "./useFavorites";
 
