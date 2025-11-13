@@ -1,5 +1,6 @@
 import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -10,6 +11,8 @@ interface User {
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -31,6 +34,19 @@ export default function ProfilePage() {
 
     fetchUser();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:3000/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      navigate("/login");
+    } catch (error) {
+      console.error("Erreur déconnexion:", error);
+    }
+  };
 
   return (
     <div className="relative w-full min-h-screen bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-gray-200">
@@ -56,6 +72,13 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
+
+      <button
+        onClick={handleLogout}
+        className="px-4 py-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-red-600"
+      >
+        Se déconnecter
+      </button>
     </div>
   );
 }

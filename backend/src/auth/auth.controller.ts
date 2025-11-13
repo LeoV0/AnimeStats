@@ -20,4 +20,15 @@ export class AuthController {
   ) {
     return this.authService.login(dto, res);
   }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+    });
+    return { message: 'Déconnexion réussie !' };
+  }
 }
