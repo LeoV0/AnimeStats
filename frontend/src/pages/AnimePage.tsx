@@ -4,7 +4,7 @@ import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Toggle } from "@/components/ui/toggle";
-import { Bookmark, Eye, EyeOff } from "lucide-react";
+import { Bookmark, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { useFavorites } from "@/context/useFavorites";
 
 interface Episode {
@@ -28,6 +28,10 @@ export default function AnimePage() {
   const [anime, setAnime] = useState<Anime | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(true);
+  const totalEpisodes = episodes.length;
+  const seenCount = episodes.filter((ep) => ep.seen).length;
+  const progress =
+    totalEpisodes > 0 ? Math.round((seenCount / totalEpisodes) * 100) : 0;
 
   const { isFavorite, toggleFavorite, refreshFavorites } = useFavorites();
 
@@ -141,6 +145,39 @@ export default function AnimePage() {
 
                 <p className="text-xl text-gray-400">{anime.name_japanese}</p>
                 <p className="text-gray-300">{anime.description}</p>
+
+                {totalEpisodes > 0 && (
+                  <div className="p-6 mt-10 space-y-5 border rounded-2xl bg-white/5 backdrop-blur-lg border-white/10">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-400">
+                        {seenCount} / {totalEpisodes} épisodes
+                      </span>
+                      <span className="font-medium text-white/90">
+                        {progress}%
+                      </span>
+                    </div>
+
+                    {progress === 100 ? (
+                      <div className="flex justify-center">
+                        <div
+                          className="inline-flex items-center gap-2.5 px-5 py-2.5 text-sm font-medium text-white
+          rounded-full border border-white/20 bg-white/10 backdrop-blur-xl
+          shadow-lg shadow-black/30"
+                        >
+                          <CheckCircle2 size={18} className="text-white/90" />
+                          <span>Animé terminé</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative h-3.5 overflow-hidden rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
+                        <div
+                          className="h-full transition-all duration-700 ease-out rounded-full shadow-inner bg-white/30 backdrop-blur-sm"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {episodes.length > 0 && (
                   <div className="mt-4">

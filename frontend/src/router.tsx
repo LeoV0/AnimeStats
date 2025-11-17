@@ -4,6 +4,7 @@ import HomePage from "@/pages/HomePage";
 import AnimePage from "./pages/AnimePage";
 import FavoritePage from "./pages/FavoritePage";
 import ProfilPage from "./pages/ProfilPage";
+import DiscoverPage from "./pages/DiscoverPage";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <AuthPage mode="login" /> },
@@ -12,5 +13,5 @@ export const router = createBrowserRouter([
   { path: "/animes/:id", element: <AnimePage /> },
   { path: "/favorites", element: <FavoritePage /> },
   { path: "/profil", element: <ProfilPage /> },
-
+  { path: "/discover", element: <DiscoverPage /> },
 ]);
