@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
 import { useFavorites } from "@/context/useFavorites";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 interface Anime {
   id: string;
   name: string;
@@ -20,7 +22,7 @@ export default function AnimeList() {
   useEffect(() => {
     async function fetchAnimes() {
       try {
-        const res = await fetch("http://localhost:3000/animes", {
+        const res = await fetch(`${API_URL}/animes`, {
           credentials: "include",
         });
         const data = await res.json();

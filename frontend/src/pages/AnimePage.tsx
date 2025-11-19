@@ -9,6 +9,8 @@ import { useFavorites } from "@/context/useFavorites";
 import { useAuth } from "@/context/useAuth";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 interface Episode {
   id: string;
   number: number;
@@ -40,7 +42,7 @@ export default function AnimePage() {
   useEffect(() => {
     setLoading(true);
 
-    const fetchAnime = fetch(`http://localhost:3000/animes/${id}`, {
+    const fetchAnime = fetch(`${API_URL}/animes/${id}`, {
       credentials: "include",
     })
       .then((res) => {
@@ -50,7 +52,7 @@ export default function AnimePage() {
       .then((data) => setAnime(data))
       .catch(console.error);
 
-    const fetchEpisodes = fetch(`http://localhost:3000/animes/${id}/episodes`, {
+    const fetchEpisodes = fetch(`${API_URL}/animes/${id}/episodes`, {
       credentials: "include",
     })
       .then((res) => {
@@ -66,10 +68,11 @@ export default function AnimePage() {
     });
   }, [id]);
 
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleToggleFavorite = async () => {
+    if (authLoading) return;
     if (!isLoggedIn) {
       navigate("/login");
       return;
@@ -85,6 +88,7 @@ export default function AnimePage() {
   };
 
   const toggleSeen = async (epId: string) => {
+    if (authLoading) return;
     if (!isLoggedIn) {
       navigate("/login");
       return;
@@ -98,7 +102,7 @@ export default function AnimePage() {
     );
 
     try {
-      await fetch(`http://localhost:3000/episodes/${epId}/watched`, {
+      await fetch(`${API_URL}/episodes/${epId}/watched`, {
         method: wasSeen ? "DELETE" : "POST",
         credentials: "include",
       });

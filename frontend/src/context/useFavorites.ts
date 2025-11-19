@@ -2,6 +2,8 @@
 import { useState, useEffect, useContext } from "react";
 import { FavoritesContext } from "./FavoritesContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 export interface FavoriteAnime {
   id: string;
 }
@@ -11,7 +13,7 @@ export function useFavorites() {
 
   const refreshFavorites = async () => {
     try {
-      const res = await fetch("http://localhost:3000/animes/favorites", {
+      const res = await fetch(`${API_URL}/animes/favorites`, {
         credentials: "include",
       });
       if (res.ok) {
@@ -31,7 +33,7 @@ export function useFavorites() {
   const toggleFavorite = async (id: string, isFavorite: boolean) => {
     const method = isFavorite ? "POST" : "DELETE";
     try {
-      await fetch(`http://localhost:3000/animes/${id}/favorites`, {
+      await fetch(`${API_URL}/animes/${id}/favorites`, {
         method,
         credentials: "include",
       });

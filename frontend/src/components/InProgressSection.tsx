@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
 import { Badge } from "@/components/ui/badge";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 interface Anime {
   id: string;
   name: string;
@@ -19,7 +21,7 @@ export default function InProgressSection() {
 
   useEffect(() => {
     const fetchInProgress = () => {
-      fetch("http://localhost:3000/animes/in-progress", {
+      fetch(`${API_URL}/animes/in-progress`, {
         credentials: "include",
       })
         .then((r) => r.json())

@@ -2,6 +2,8 @@ import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 interface User {
   id: string;
   name: string;
@@ -17,7 +19,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:3000/users/me", {
+        const res = await fetch(`${API_URL}/users/me`, {
           credentials: "include",
         });
 
@@ -37,7 +39,7 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:3000/auth/logout", {
+      await fetch(`${API_URL}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

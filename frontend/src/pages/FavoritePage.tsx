@@ -5,6 +5,8 @@ import AnimeCard from "@/components/AnimeCard";
 import Page1 from "@/components/glow-menu";
 import { useFavorites } from "@/context/useFavorites";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 interface Anime {
   id: string;
   name: string;
@@ -20,7 +22,7 @@ export default function FavoritesPage() {
   useEffect(() => {
     async function fetchFavorites() {
       try {
-        const res = await fetch("http://localhost:3000/animes/favorites", {
+        const res = await fetch(`${API_URL}/animes/favorites`, {
           credentials: "include",
         });
         if (res.ok) {

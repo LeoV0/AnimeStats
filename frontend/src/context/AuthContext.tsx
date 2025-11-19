@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 interface AuthContextType {
   isLoggedIn: boolean;
   loading: boolean;
@@ -14,7 +16,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await fetch("http://localhost:3000/users/me", {
+        const res = await fetch(`${API_URL}/users/me`, {
           credentials: "include",
         });
         setIsLoggedIn(res.ok);
