@@ -6,6 +6,9 @@ import { Home, User, Bookmark, Compass } from "lucide-react";
 import { useTheme } from "next-themes";
 import { ThemeProvider } from "next-themes";
 
+import { useAuth } from "@/context/useAuth";
+import { LogIn } from "lucide-react";
+
 interface MenuItem {
   icon: React.ReactNode;
   label: string;
@@ -13,41 +16,6 @@ interface MenuItem {
   gradient: string;
   iconColor: string;
 }
-
-const menuItems: MenuItem[] = [
-  {
-    icon: <Home className="w-5 h-5" />,
-    label: "Accueil",
-    href: "/",
-    gradient:
-      "radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(37,99,235,0.06) 50%, rgba(29,78,216,0) 100%)",
-    iconColor: "text-blue-500",
-  },
-  {
-    icon: <Compass className="w-5 h-5" />,
-    label: "Découvrir",
-    href: "/discover",
-    gradient:
-      "radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)",
-    iconColor: "text-orange-500",
-  },
-  {
-    icon: <Bookmark className="w-5 h-5" />,
-    label: "Mes Favoris",
-    href: "/favorites",
-    gradient:
-      "radial-gradient(circle, rgba(34,197,94,0.15) 0%, rgba(22,163,74,0.06) 50%, rgba(21,128,61,0) 100%)",
-    iconColor: "text-green-500",
-  },
-  {
-    icon: <User className="w-5 h-5" />,
-    label: "Profil",
-    href: "/profil",
-    gradient:
-      "radial-gradient(circle, rgba(239,68,68,0.15) 0%, rgba(220,38,38,0.06) 50%, rgba(185,28,28,0) 100%)",
-    iconColor: "text-red-500",
-  },
-];
 
 const itemVariants = {
   initial: { rotateX: 0, opacity: 1 },
@@ -65,8 +33,8 @@ const glowVariants = {
     opacity: 1,
     scale: 2,
     transition: {
-      opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-      scale: { duration: 0.5, type: "spring", stiffness: 300, damping: 25 },
+      opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const },
+      scale: { duration: 0.5, type: "spring" as const, stiffness: 300, damping: 25 },
     },
   },
 };
@@ -77,13 +45,13 @@ const navGlowVariants = {
     opacity: 1,
     transition: {
       duration: 0.5,
-      ease: [0.4, 0, 0.2, 1],
+      ease: [0.4, 0, 0.2, 1] as const,
     },
   },
 };
 
 const sharedTransition = {
-  type: "spring",
+  type: "spring" as const,
   stiffness: 100,
   damping: 20,
   duration: 0.5,
@@ -91,8 +59,55 @@ const sharedTransition = {
 
 function MenuBar() {
   const { theme } = useTheme();
+  const { isLoggedIn } = useAuth();
 
   const isDarkTheme = theme === "dark";
+
+  const menuItems: MenuItem[] = [
+    {
+      icon: <Home className="w-5 h-5" />,
+      label: "Accueil",
+      href: "/",
+      gradient:
+        "radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(37,99,235,0.06) 50%, rgba(29,78,216,0) 100%)",
+      iconColor: "text-blue-500",
+    },
+    {
+      icon: <Compass className="w-5 h-5" />,
+      label: "Découvrir",
+      href: "/discover",
+      gradient:
+        "radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)",
+      iconColor: "text-orange-500",
+    },
+    {
+      icon: <Bookmark className="w-5 h-5" />,
+      label: "Mes Favoris",
+      href: "/favorites",
+      gradient:
+        "radial-gradient(circle, rgba(34,197,94,0.15) 0%, rgba(22,163,74,0.06) 50%, rgba(21,128,61,0) 100%)",
+      iconColor: "text-green-500",
+    },
+    isLoggedIn
+      ? {
+          icon: <User className="w-5 h-5" />,
+          label: "Profil",
+          href: "/profil",
+          gradient:
+            "radial-gradient(circle, rgba(239,68,68,0.15) 0%, rgba(220,38,38,0.06) 50%, rgba(185,28,28,0) 100%)",
+          iconColor: "text-red-500",
+        }
+      : {
+          icon: <LogIn className="w-5 h-5" />,
+          label: "Connexion",
+          href: "/login",
+          gradient:
+            "radial-gradient(circle, rgba(168,85,247,0.15) 0%, rgba(147,51,234,0.06) 50%, rgba(126,34,206,0) 100%)",
+          iconColor: "text-purple-500",
+        },
+  ];
+
+
 
   return (
     <motion.nav
@@ -171,7 +186,7 @@ function MenuBar() {
 
 export default function Page1() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" disableSystemTheme>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <div className="flex flex-col items-center w-full pb-10 bg-background">
         <MenuBar />
       </div>

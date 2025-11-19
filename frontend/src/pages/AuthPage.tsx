@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { registerUser, loginUser } from "@/services/auth";
 import { toast } from "sonner";
+import { useAuth } from "@/context/useAuth";
 
 interface AuthPageProps {
   mode: "login" | "register";
@@ -25,6 +26,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { checkAuth } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,10 +48,12 @@ export default function AuthPage({ mode }: AuthPageProps) {
     try {
       if (mode === "login") {
         await loginUser({ email, password });
+        await checkAuth();
         toast.success("Connexion réussie !", { id: toastId });
         navigate("/");
       } else if (mode === "register") {
         await registerUser({ name, email, password });
+        await checkAuth();
         toast.success("Compte créé avec succès !", { id: toastId });
         navigate("/login");
       }

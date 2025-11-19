@@ -1,6 +1,7 @@
 import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/useAuth";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -13,6 +14,7 @@ interface User {
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { checkAuth } = useAuth();
 
   const navigate = useNavigate();
 
@@ -44,6 +46,7 @@ export default function ProfilePage() {
         credentials: "include",
       });
 
+      await checkAuth();
       navigate("/login");
     } catch (error) {
       console.error("Erreur déconnexion:", error);
