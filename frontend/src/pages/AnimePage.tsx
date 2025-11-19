@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { Toggle } from "@/components/ui/toggle";
 import { Bookmark, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { useFavorites } from "@/context/useFavorites";
+import { useAuth } from "@/context/useAuth";
+import { useNavigate } from "react-router-dom";
 
 interface Episode {
   id: string;
@@ -64,7 +66,14 @@ export default function AnimePage() {
     });
   }, [id]);
 
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
   const handleToggleFavorite = async () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
     if (!anime) return;
     const newState = !isFavorite(anime.id);
     try {
@@ -76,6 +85,10 @@ export default function AnimePage() {
   };
 
   const toggleSeen = async (epId: string) => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
     const current = episodes.find((ep) => ep.id === epId);
     if (!current) return;
     const wasSeen = current.seen;

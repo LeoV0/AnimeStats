@@ -7,6 +7,9 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFavorites } from "@/context/useFavorites";
+import { useAuth } from "@/context/useAuth";
+
+import { useNavigate } from "react-router-dom";
 
 interface AnimeCardProps {
   id: string;
@@ -35,7 +38,14 @@ export default function AnimeCard({
 
   const currentFavorite = propIsFavorite ?? isFavorite(id);
 
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
   const handleToggle = async () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
     const newState = !currentFavorite;
     try {
       await toggleFavorite(id, newState);
