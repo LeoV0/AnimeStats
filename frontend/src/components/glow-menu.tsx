@@ -141,11 +141,11 @@ function MenuBar() {
                 >
                   {item.icon}
                 </span>
-                <span>{item.label}</span>
+                <span className="hidden md:block">{item.label}</span>
               </motion.a>
               <motion.a
                 href={item.href}
-                className="absolute inset-0 z-10 flex items-center gap-2 px-4 py-2 transition-colors bg-transparent text-muted-foreground group-hover:text-foreground rounded-xl"
+                className="absolute inset-0 z-10 flex items-center justify-center gap-2 px-4 py-2 transition-colors bg-transparent text-muted-foreground group-hover:text-foreground rounded-xl md:justify-start"
                 variants={backVariants}
                 transition={sharedTransition}
                 style={{
@@ -159,7 +159,7 @@ function MenuBar() {
                 >
                   {item.icon}
                 </span>
-                <span>{item.label}</span>
+                <span className="hidden md:block">{item.label}</span>
               </motion.a>
             </motion.div>
           </motion.li>
