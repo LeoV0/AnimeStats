@@ -14,7 +14,11 @@ interface Anime {
   isFavorite?: boolean;
 }
 
-export default function AnimeList() {
+interface AnimeListProps{
+  endpoint?: string;
+}
+
+export default function AnimeList({endpoint = "/animes" }: AnimeListProps) {
   const [animes, setAnimes] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
   const { isFavorite, toggleFavorite, refreshFavorites } = useFavorites();
@@ -22,7 +26,7 @@ export default function AnimeList() {
   useEffect(() => {
     async function fetchAnimes() {
       try {
-        const res = await fetch(`${API_URL}/animes`, {
+        const res = await fetch(`${API_URL}${endpoint}`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -35,7 +39,7 @@ export default function AnimeList() {
       }
     }
     fetchAnimes();
-  }, []);
+  }, [endpoint]);
 
   const handleToggle = async (animeId: string) => {
     const current = isFavorite(animeId);

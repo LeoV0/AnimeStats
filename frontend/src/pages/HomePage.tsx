@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Scene } from "@/components/hero-section";
 import Page1 from "@/components/glow-menu";
 import JapaneseSection from "@/components/JapaneseSection";
-import AnimeList from "@/components/AnimeList";
+import InfiniteScrollCarousel from "@/components/InfiniteScrollCarousel";
 import InProgressSection from "@/components/InProgressSection";
 
 const features = [
@@ -99,7 +99,7 @@ const HomePage = () => {
           <InProgressSection />
           <div>
             <JapaneseSection />
-            <AnimeList />
+            <InfiniteScrollCarousel endpoint="/animes/latest" />
           </div>
         </div>
       </div>
