@@ -238,11 +238,11 @@ export default function AnimePage() {
               <div className="w-full max-w-[400px] h-96 bg-white/5 rounded-xl" />
             ) : (
               anime && (
-                <div className="relative  w-full max-w-[400px] rounded-xl overflow-hidden shadow-lg">
+                <div className="relative w-full max-w-[400px] rounded-xl overflow-hidden shadow-lg h-fit sticky top-24">
                   <img
                     src={anime.image_url}
                     alt={anime.name}
-                    className="object-cover w-full h-auto rounded-xl"
+                    className="object-cover w-full h-auto block"
                   />
                 </div>
               )
