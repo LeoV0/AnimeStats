@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/useAuth";
 import AnimeCard from "@/components/AnimeCard";
 import { Badge } from "@/components/ui/badge";
+import { Trophy } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -114,8 +115,9 @@ export default function ProfilePage() {
                         image={anime.image_url}
                         showFavorite={false}
                         badge={
-                          <Badge className="text-blue-400 border bg-blue-500/20 border-blue-500/50">
-                            Terminé
+                          <Badge className="flex items-center gap-1 text-yellow-400 border bg-yellow-500/20 border-yellow-500/50">
+                            <Trophy className="w-3 h-3" />
+                            Complété
                           </Badge>
                         }
                         progress={`${anime.totalEpisodes} épisodes`}
