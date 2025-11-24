@@ -57,6 +57,17 @@ export class AnimeController {
     return this.animeService.getInProgress(userId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('completed')
+  async getCompleted(@Req() req: JwtRequest) {
+    if (!req.user?.id) {
+      throw new UnauthorizedException('Utilisateur non authentifié');
+    }
+
+    const userId = BigInt(req.user.id);
+    return this.animeService.getCompleted(userId);
+  }
+
   @Get('latest')
   async getLatestAnimes() {
     const animes = await this.animeService.getTenLastAnimes();

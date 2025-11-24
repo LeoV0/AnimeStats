@@ -2,6 +2,8 @@ import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/useAuth";
+import AnimeCard from "@/components/AnimeCard";
+import { Badge } from "@/components/ui/badge";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -11,12 +13,22 @@ interface User {
   email: string;
 }
 
+interface Anime {
+  id: string;
+  name: string;
+  name_japanese: string;
+  image_url: string;
+  totalEpisodes: number;
+}
+
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const { checkAuth } = useAuth();
 
   const navigate = useNavigate();
+
+  const [completedAnimes, setCompletedAnimes] = useState<Anime[]>([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,7 +48,22 @@ export default function ProfilePage() {
       }
     };
 
+    const fetchCompleted = async () => {
+      try {
+        const res = await fetch(`${API_URL}/animes/completed`, {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setCompletedAnimes(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        console.error("Erreur animes terminés:", error);
+      }
+    };
+
     fetchUser();
+    fetchCompleted();
   }, []);
 
   const handleLogout = async () => {
@@ -71,6 +98,32 @@ export default function ProfilePage() {
               <h1 className="text-3xl font-bold text-white">
                 Bonjour, {user.name}
               </h1>
+
+              {completedAnimes.length > 0 && (
+                <div className="mt-12">
+                  <h2 className="mb-6 text-2xl font-bold text-white">
+                    Animes Terminés
+                  </h2>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {completedAnimes.map((anime) => (
+                      <AnimeCard
+                        key={anime.id}
+                        id={anime.id}
+                        title={anime.name}
+                        description={anime.name_japanese}
+                        image={anime.image_url}
+                        showFavorite={false}
+                        badge={
+                          <Badge className="text-blue-400 border bg-blue-500/20 border-blue-500/50">
+                            Terminé
+                          </Badge>
+                        }
+                        progress={`${anime.totalEpisodes} épisodes`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <p className="text-xl text-red-400">Erreur de chargement</p>
@@ -78,12 +131,14 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <button
-        onClick={handleLogout}
-        className="px-4 py-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-red-600"
-      >
-        Se déconnecter
-      </button>
+      <div className="fixed bottom-6 right-6">
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 shadow-lg cursor-pointer"
+        >
+          Se déconnecter
+        </button>
+      </div>
     </div>
   );
 }

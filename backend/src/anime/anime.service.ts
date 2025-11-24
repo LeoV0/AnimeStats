@@ -75,16 +75,68 @@ export class AnimeService {
           orderBy: { number: 'desc' },
           take: 1,
         },
+        _count: {
+          select: {
+            episodes: {
+              where: {
+                user_progression: { some: { user_id: userId, seen: true } },
+              },
+            },
+          },
+        },
       },
-      take: 6,
+      take: 20,
     });
 
-    return animes.map((a) => ({
+    const inProgressAnimes = animes.filter((a) => {
+      const seenCount = a._count.episodes;
+      return a.total_episodes === 0 || seenCount < a.total_episodes;
+    });
+
+    return inProgressAnimes.slice(0, 6).map((a) => ({
       id: a.id.toString(),
       name: a.name,
       name_japanese: a.name_japanese,
       image_url: a.image_url,
       lastSeenEpisode: a.episodes[0]?.number || 1,
+    }));
+  }
+
+  async getCompleted(userId: bigint) {
+    const animes = await this.prisma.anime.findMany({
+      where: {
+        episodes: {
+          some: {
+            user_progression: {
+              some: { user_id: userId, seen: true },
+            },
+          },
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            episodes: {
+              where: {
+                user_progression: { some: { user_id: userId, seen: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const completedAnimes = animes.filter((a) => {
+      const seenCount = a._count.episodes;
+      return seenCount >= a.total_episodes && a.total_episodes > 0;
+    });
+
+    return completedAnimes.map((a) => ({
+      id: a.id.toString(),
+      name: a.name,
+      name_japanese: a.name_japanese,
+      image_url: a.image_url,
+      totalEpisodes: a.total_episodes,
     }));
   }
 
