@@ -94,10 +94,10 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div id="animes" className="relative z-10 py-16">
+      <div className="relative z-10 py-16">
         <div className="px-6 mx-auto space-y-24 max-w-7xl">
           <InProgressSection />
-          <div>
+          <div id="animes">
             <JapaneseSection />
             <InfiniteScrollCarousel endpoint="/animes/latest" />
           </div>

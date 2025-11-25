@@ -58,11 +58,10 @@ export class AnimeService {
   async getInProgress(userId: bigint) {
     const animes = await this.prisma.anime.findMany({
       where: {
-        episodes: {
+        user_status: {
           some: {
-            user_progression: {
-              some: { user_id: userId, seen: true },
-            },
+            user_id: userId,
+            status: 'WATCHING',
           },
         },
       },
@@ -75,63 +74,32 @@ export class AnimeService {
           orderBy: { number: 'desc' },
           take: 1,
         },
-        _count: {
-          select: {
-            episodes: {
-              where: {
-                user_progression: { some: { user_id: userId, seen: true } },
-              },
-            },
-          },
-        },
       },
-      take: 20,
+      take: 6,
     });
 
-    const inProgressAnimes = animes.filter((a) => {
-      const seenCount = a._count.episodes;
-      return a.total_episodes === 0 || seenCount < a.total_episodes;
-    });
-
-    return inProgressAnimes.slice(0, 6).map((a) => ({
+    return animes.map((a) => ({
       id: a.id.toString(),
       name: a.name,
       name_japanese: a.name_japanese,
       image_url: a.image_url,
-      lastSeenEpisode: a.episodes[0]?.number || 1,
+      lastSeenEpisode: a.episodes[0]?.number || 0,
     }));
   }
 
   async getCompleted(userId: bigint) {
     const animes = await this.prisma.anime.findMany({
       where: {
-        episodes: {
+        user_status: {
           some: {
-            user_progression: {
-              some: { user_id: userId, seen: true },
-            },
-          },
-        },
-      },
-      include: {
-        _count: {
-          select: {
-            episodes: {
-              where: {
-                user_progression: { some: { user_id: userId, seen: true } },
-              },
-            },
+            user_id: userId,
+            status: 'COMPLETED',
           },
         },
       },
     });
 
-    const completedAnimes = animes.filter((a) => {
-      const seenCount = a._count.episodes;
-      return seenCount >= a.total_episodes && a.total_episodes > 0;
-    });
-
-    return completedAnimes.map((a) => ({
+    return animes.map((a) => ({
       id: a.id.toString(),
       name: a.name,
       name_japanese: a.name_japanese,
