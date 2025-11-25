@@ -82,15 +82,15 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-gray-200">
-      <div className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none top-4">
-        <div className="w-full max-w-6xl px-6 pointer-events-auto">
+    <div className="relative w-full min-h-screen bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-gray-200">
+      <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
+        <div className="px-6 w-full max-w-6xl pointer-events-auto">
           <Page1 />
         </div>
       </div>
 
       <div className="relative z-10 p-6 pt-40">
-        <div className="max-w-6xl mx-auto">
+        <div className="mx-auto max-w-6xl">
           {loading ? (
             <p className="text-xl text-gray-400">Chargement...</p>
           ) : user ? (
@@ -115,7 +115,7 @@ export default function ProfilePage() {
                         image={anime.image_url}
                         showFavorite={false}
                         badge={
-                          <Badge className="flex items-center gap-1 text-yellow-400 border bg-yellow-500/20 border-yellow-500/50">
+                          <Badge className="flex gap-1 items-center text-yellow-400 border bg-yellow-500/20 border-yellow-500/50">
                             <Trophy className="w-3 h-3" />
                             Complété
                           </Badge>
@@ -133,10 +133,10 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="fixed bottom-6 right-6">
+      <div className="fixed right-6 bottom-6">
         <button
           onClick={handleLogout}
-          className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 shadow-lg cursor-pointer"
+          className="px-4 py-2 text-white bg-red-500 rounded-lg shadow-lg cursor-pointer hover:bg-red-600"
         >
           Se déconnecter
         </button>

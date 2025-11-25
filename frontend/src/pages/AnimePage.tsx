@@ -117,31 +117,31 @@ export default function AnimePage() {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-gray-200">
-      <div className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none top-4">
-        <div className="w-full max-w-6xl px-6 pointer-events-auto">
+    <div className="relative w-full min-h-screen bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-gray-200">
+      <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
+        <div className="px-6 w-full max-w-6xl pointer-events-auto">
           <Page1 />
         </div>
       </div>
 
       <div className="relative z-10 p-6 pt-40">
-        <div className="flex flex-col max-w-6xl gap-12 mx-auto md:flex-row">
-          <div className="flex flex-col flex-[2] gap-6">
+        <div className="flex flex-col gap-12 mx-auto max-w-6xl md:flex-row">
+          <div className="flex flex-col gap-6 flex-2">
             {loading && (
-              <div className="flex items-center justify-center h-64">
+              <div className="flex justify-center items-center h-64">
                 <p className="text-xl text-gray-400">Chargement...</p>
               </div>
             )}
 
             {!loading && !anime && (
-              <div className="flex items-center justify-center h-64">
+              <div className="flex justify-center items-center h-64">
                 <p className="text-xl text-red-400">Anime non trouvé</p>
               </div>
             )}
 
             {!loading && anime && (
               <>
-                <div className="flex items-center gap-2">
+                <div className="flex gap-2 items-center">
                   <h2 className="text-3xl font-bold text-white">
                     {anime.name}
                   </h2>
@@ -164,8 +164,8 @@ export default function AnimePage() {
                 <p className="text-gray-300">{anime.description}</p>
 
                 {totalEpisodes > 0 && (
-                  <div className="p-6 mt-10 space-y-5 border rounded-2xl bg-white/5 backdrop-blur-lg border-white/10">
-                    <div className="flex items-center justify-between text-sm">
+                  <div className="p-6 mt-10 space-y-5 rounded-2xl border backdrop-blur-lg bg-white/5 border-white/10">
+                    <div className="flex justify-between items-center text-sm">
                       <span className="text-neutral-400">
                         {seenCount} / {totalEpisodes} épisodes
                       </span>
@@ -188,7 +188,7 @@ export default function AnimePage() {
                     ) : (
                       <div className="relative h-3.5 overflow-hidden rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
                         <div
-                          className="h-full transition-all duration-700 ease-out rounded-full shadow-inner bg-white/30 backdrop-blur-sm"
+                          className="h-full rounded-full shadow-inner backdrop-blur-sm transition-all duration-700 ease-out bg-white/30"
                           style={{ width: `${progress}%` }}
                         />
                       </div>
@@ -205,7 +205,7 @@ export default function AnimePage() {
                       {episodes.map((ep) => (
                         <li
                           key={ep.id}
-                          className="flex items-center justify-between p-2 text-gray-300 border rounded-lg border-white/10 bg-white/5"
+                          className="flex justify-between items-center p-2 text-gray-300 rounded-lg border border-white/10 bg-white/5"
                         >
                           <span
                             className={`flex-1 ${
@@ -233,7 +233,7 @@ export default function AnimePage() {
             )}
           </div>
 
-          <div className="relative flex justify-center flex-1 mt-0 md:mt-0">
+          <div className="flex relative flex-1 justify-center mt-0 md:mt-0">
             {loading ? (
               <div className="w-full max-w-[400px] h-96 bg-white/5 rounded-xl" />
             ) : (
@@ -242,7 +242,7 @@ export default function AnimePage() {
                   <img
                     src={anime.image_url}
                     alt={anime.name}
-                    className="object-cover w-full h-auto block"
+                    className="block object-cover w-full h-auto"
                   />
                 </div>
               )

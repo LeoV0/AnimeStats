@@ -3,7 +3,7 @@ import Page1 from "@/components/glow-menu";
 
 export default function DiscoverPage() {
   return (
-    <div className="relative w-full bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white min-h-screen">
+    <div className="relative w-full bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-white min-h-screen">
       <div className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none top-4">
         <div className="w-full max-w-6xl px-6 pointer-events-auto">
           <Page1 />

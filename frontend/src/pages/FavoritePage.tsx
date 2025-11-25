@@ -41,15 +41,15 @@ export default function FavoritesPage() {
   }, []);
 
   return (
-    <div className="relative w-full bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white min-h-screen">
-      <div className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none top-4">
-        <div className="w-full max-w-6xl px-6 pointer-events-auto">
+    <div className="relative w-full bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-white min-h-screen">
+      <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
+        <div className="px-6 w-full max-w-6xl pointer-events-auto">
           <Page1 />
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center min-h-screen p-6 pt-32">
-        <div className="w-full max-w-6xl space-y-8">
+      <div className="flex relative z-10 flex-col items-center p-6 pt-32 min-h-screen">
+        <div className="space-y-8 w-full max-w-6xl">
           <div className="space-y-1 text-left">
             <h1 className="text-2xl font-bold md:text-3xl text-white/90">
               私の好きなアニメ
@@ -64,7 +64,7 @@ export default function FavoritesPage() {
           )}
 
           {!loading && favorites.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="flex flex-col justify-center items-center py-20 text-center">
               <p className="text-2xl text-neutral-500">Aucun favori</p>
               <p className="mt-2 text-neutral-400">
                 Ajoute des animés depuis l'accueil !
@@ -73,7 +73,7 @@ export default function FavoritesPage() {
           )}
 
           {!loading && favorites.length > 0 && (
-            <div className="grid grid-cols-1 gap-8 py-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-items-center">
+            <div className="grid grid-cols-1 gap-8 justify-items-center py-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
               {favorites.map((anime) => (
                 <AnimeCard
                   key={anime.id}

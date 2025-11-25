@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
 
   if (loading)
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] flex items-center justify-center text-white">
+      <div className="w-full min-h-screen bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] flex items-center justify-center text-white">
         <p>Chargement...</p>
       </div>
     );

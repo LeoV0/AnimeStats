@@ -92,7 +92,7 @@ export default function InfiniteScrollCarousel({
 
   if (loading)
     return (
-      <div className="flex items-center justify-center w-full h-64 text-neutral-400">
+      <div className="flex justify-center items-center w-full h-64 text-neutral-400">
         Chargement...
       </div>
     );
@@ -101,7 +101,7 @@ export default function InfiniteScrollCarousel({
 
   return (
     <div 
-        className="relative w-full overflow-hidden py-10 cursor-grab active:cursor-grabbing"
+        className="overflow-hidden relative py-10 w-full cursor-grab active:cursor-grabbing"
         style={{
             maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
             WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
@@ -119,7 +119,7 @@ export default function InfiniteScrollCarousel({
         {[0, 1, 2, 3].map((i) => (
             <div key={i} className="flex gap-8 pr-8" ref={i === 0 ? carouselRef : null}>
                 {animes.map((anime) => (
-                <div key={`${i}-${anime.id}`} className="flex-shrink-0 pointer-events-none">
+                <div key={`${i}-${anime.id}`} className="pointer-events-none shrink-0">
                     <div 
                         className="pointer-events-auto"
                         onMouseEnter={() => setIsHovered(true)}

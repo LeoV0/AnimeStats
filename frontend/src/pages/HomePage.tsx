@@ -7,6 +7,7 @@ import Page1 from "@/components/glow-menu";
 import JapaneseSection from "@/components/JapaneseSection";
 import InfiniteScrollCarousel from "@/components/InfiniteScrollCarousel";
 import InProgressSection from "@/components/InProgressSection";
+import { useAuth } from "@/context/useAuth";
 
 const features = [
   {
@@ -27,25 +28,29 @@ const features = [
   },
 ];
 
+
+
 const HomePage = () => {
+  const { isLoggedIn } = useAuth();
+
   return (
-    <div className="relative w-full bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white ">
-      <div className="absolute inset-0 z-0 h-screen pointer-events-none opacity-70">
+    <div className="relative w-full bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-white ">
+      <div className="absolute inset-0 z-0 h-screen opacity-70 pointer-events-none">
         <Scene />
       </div>
 
-      <div className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none top-4">
-        <div className="w-full max-w-6xl px-6 pointer-events-auto">
+      <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
+        <div className="px-6 w-full max-w-6xl pointer-events-auto">
           <Page1 />
         </div>
       </div>
 
-      <div className="relative flex flex-col items-center justify-center min-h-screen p-6 sm:p-8">
-        <div className="relative z-10 flex flex-col items-center w-full max-w-6xl space-y-12 pt-15">
+      <div className="flex relative flex-col justify-center items-center p-6 min-h-screen sm:p-8">
+        <div className="flex relative z-10 flex-col items-center space-y-12 w-full max-w-6xl pt-15">
           <div className="flex flex-col items-center space-y-6 text-center">
             <Badge
               variant="secondary"
-              className="px-4 py-2 text-white transition-all duration-300 border rounded-full backdrop-blur-sm bg-white/10 border-white/20 hover:bg-white/20"
+              className="px-4 py-2 text-white rounded-full border backdrop-blur-sm transition-all duration-300 bg-white/10 border-white/20 hover:bg-white/20"
             >
               YumeTrack • Suis. Découvre. Profite.
             </Badge>
@@ -58,25 +63,27 @@ const HomePage = () => {
               nouvelles sorties.
             </p>
 
-            <div className="flex flex-col items-center gap-4 sm:flex-row">
-              <Link to="/register">
-                <Button className="px-8 py-3 text-sm text-black transition-all duration-300 bg-white border cursor-pointer rounded-xl border-white/10 hover:bg-white/90">
-                  S'inscrire
-                </Button>
-              </Link>
+            <div className="flex flex-col gap-4 items-center sm:flex-row">
+              {!isLoggedIn && (
+                <Link to="/register">
+                  <Button className="px-8 py-3 text-sm text-black bg-white rounded-xl border transition-all duration-300 cursor-pointer border-white/10 hover:bg-white/90">
+                    S'inscrire
+                  </Button>
+                </Link>
+              )}
               <a href="#animes">
-                <Button className="px-8 py-3 text-sm text-white transition-all duration-300 bg-transparent border cursor-pointer rounded-xl border-white/20 hover:bg-white/10">
+                <Button className="px-8 py-3 text-sm text-white bg-transparent rounded-xl border transition-all duration-300 cursor-pointer border-white/20 hover:bg-white/10">
                   Explorer les Animés
                 </Button>
               </a>
             </div>
           </div>
 
-          <div className="grid w-full max-w-4xl grid-cols-1 gap-6 mx-auto sm:grid-cols-2 md:grid-cols-3 justify-items-center">
+          <div className="grid grid-cols-1 gap-6 justify-items-center mx-auto w-full max-w-4xl sm:grid-cols-2 md:grid-cols-3">
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className="flex flex-col items-start justify-start w-full h-40 max-w-xs p-4 space-y-2 transition-transform duration-300 border backdrop-blur-sm bg-white/5 border-white/10 rounded-xl md:p-6 md:h-48 md:space-y-3 "
+                className="flex flex-col justify-start items-start p-4 space-y-2 w-full max-w-xs h-40 rounded-xl border backdrop-blur-sm transition-transform duration-300 bg-white/5 border-white/10 md:p-6 md:h-48 md:space-y-3"
               >
                 <feature.icon
                   size={28}

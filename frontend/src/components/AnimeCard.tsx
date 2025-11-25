@@ -63,17 +63,17 @@ export default function AnimeCard({
       <motion.img
         src={image}
         alt={title}
-        className="absolute inset-0 object-cover w-full h-full transition-opacity duration-500 opacity-40 group-hover:opacity-100"
+        className="object-cover absolute inset-0 w-full h-full opacity-40 transition-opacity duration-500 group-hover:opacity-100"
         initial={{ scale: 1.05 }}
         whileHover={{ scale: 1.1 }}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+      <div className="absolute inset-0 to-transparent bg-linear-to-t from-black/70 via-black/20" />
 
-      {badge && <div className="absolute z-10 top-3 left-3">{badge}</div>}
+      {badge && <div className="absolute top-3 left-3 z-10">{badge}</div>}
 
-      <div className="absolute bottom-0 left-0 right-0 flex flex-col p-4 space-y-3">
-        <div className="flex items-start justify-between">
+      <div className="flex absolute right-0 bottom-0 left-0 flex-col p-4 space-y-3">
+        <div className="flex justify-between items-start">
           <h3 className="text-lg font-semibold text-white line-clamp-2">
             {title}
           </h3>
@@ -87,7 +87,7 @@ export default function AnimeCard({
               <Bookmark
                 className={`w-5 h-5 transition-colors ${
                   currentFavorite
-                    ? "fill-yellow-400 text-yellow-400"
+                    ? "text-yellow-400 fill-yellow-400"
                     : "text-white"
                 }`}
               />
@@ -99,7 +99,7 @@ export default function AnimeCard({
 
         <Button
           variant="secondary"
-          className="px-4 py-1 mt-2 text-sm text-white border rounded-lg cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20"
+          className="px-4 py-1 mt-2 text-sm text-white rounded-lg border cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20"
         >
           <Link to={`/animes/${id}`}>Lire plus</Link>
         </Button>

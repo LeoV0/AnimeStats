@@ -111,7 +111,7 @@ function MenuBar() {
 
   return (
     <motion.nav
-      className="relative p-2 overflow-hidden shadow-lg rounded-2xl bg-gradient-to-b from-background/80 to-background/40 backdrop-blur-lg "
+      className="overflow-hidden relative p-2 rounded-2xl shadow-lg backdrop-blur-lg bg-linear-to-b from-background/80 to-background/40"
       initial="initial"
       whileHover="hover"
     >
@@ -123,11 +123,11 @@ function MenuBar() {
         } to-transparent rounded-3xl z-0 pointer-events-none`}
         variants={navGlowVariants}
       />
-      <ul className="relative z-10 flex items-center gap-2">
+      <ul className="flex relative z-10 gap-2 items-center">
         {menuItems.map((item) => (
           <motion.li key={item.label} className="relative">
             <motion.div
-              className="relative block overflow-visible rounded-xl group"
+              className="block overflow-visible relative rounded-xl group"
               style={{ perspective: "600px" }}
               whileHover="hover"
               initial="initial"
@@ -143,7 +143,7 @@ function MenuBar() {
               />
               <motion.a
                 href={item.href}
-                className="relative z-10 flex items-center gap-2 px-4 py-2 transition-colors bg-transparent text-muted-foreground group-hover:text-foreground rounded-xl"
+                className="flex relative z-10 gap-2 items-center px-4 py-2 bg-transparent rounded-xl transition-colors text-muted-foreground group-hover:text-foreground"
                 variants={itemVariants}
                 transition={sharedTransition}
                 style={{
@@ -160,7 +160,7 @@ function MenuBar() {
               </motion.a>
               <motion.a
                 href={item.href}
-                className="absolute inset-0 z-10 flex items-center justify-center gap-2 px-4 py-2 transition-colors bg-transparent text-muted-foreground group-hover:text-foreground rounded-xl md:justify-start"
+                className="flex absolute inset-0 z-10 gap-2 justify-center items-center px-4 py-2 bg-transparent rounded-xl transition-colors text-muted-foreground group-hover:text-foreground md:justify-start"
                 variants={backVariants}
                 transition={sharedTransition}
                 style={{
@@ -187,7 +187,7 @@ function MenuBar() {
 export default function Page1() {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <div className="flex flex-col items-center w-full pb-10 bg-background">
+      <div className="flex flex-col items-center pb-10 w-full bg-background">
         <MenuBar />
       </div>
     </ThemeProvider>
