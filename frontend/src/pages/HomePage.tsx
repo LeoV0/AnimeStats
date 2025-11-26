@@ -1,13 +1,19 @@
+import React, { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tv, Bookmark, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Scene } from "@/components/hero-section";
 import Page1 from "@/components/glow-menu";
 import JapaneseSection from "@/components/JapaneseSection";
 import InfiniteScrollCarousel from "@/components/InfiniteScrollCarousel";
 import InProgressSection from "@/components/InProgressSection";
 import { useAuth } from "@/context/useAuth";
+
+const Scene = React.lazy(() =>
+  import("@/components/hero-section").then((module) => ({
+    default: module.Scene,
+  }))
+);
 
 const features = [
   {
@@ -28,16 +34,28 @@ const features = [
   },
 ];
 
-
-
 const HomePage = () => {
   const { isLoggedIn } = useAuth();
+  const [isDesktop, setIsDesktop] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const checkDesktop = () => setIsDesktop(window.innerWidth > 768);
+      checkDesktop();
+      window.addEventListener("resize", checkDesktop);
+      return () => window.removeEventListener("resize", checkDesktop);
+    }
+  }, []);
 
   return (
     <div className="relative w-full bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-white ">
-      <div className="absolute inset-0 z-0 h-screen opacity-70 pointer-events-none">
-        <Scene />
-      </div>
+      {isDesktop && (
+        <div className="absolute inset-0 z-0 h-screen opacity-70 pointer-events-none">
+          <Suspense fallback={null}>
+            <Scene />
+          </Suspense>
+        </div>
+      )}
 
       <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
         <div className="px-6 w-full max-w-6xl pointer-events-auto">

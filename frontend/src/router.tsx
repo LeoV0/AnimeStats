@@ -1,23 +1,56 @@
+import React, { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import AuthPage from "@/pages/AuthPage";
-import HomePage from "@/pages/HomePage";
-import AnimePage from "./pages/AnimePage";
-import FavoritePage from "./pages/FavoritePage";
-import ProfilPage from "./pages/ProfilPage";
-import DiscoverPage from "./pages/DiscoverPage";
 import ProtectedRoute from "./components/ProtectedRoutes";
+import { LoadingSpinner } from "./components/LoadingSpinner";
+
+// Lazy load pages
+const AuthPage = React.lazy(() => import("@/pages/AuthPage"));
+const HomePage = React.lazy(() => import("@/pages/HomePage"));
+const AnimePage = React.lazy(() => import("./pages/AnimePage"));
+const FavoritePage = React.lazy(() => import("./pages/FavoritePage"));
+const ProfilPage = React.lazy(() => import("./pages/ProfilPage"));
+const DiscoverPage = React.lazy(() => import("./pages/DiscoverPage"));
 
 export const router = createBrowserRouter([
-  { path: "/login", element: <AuthPage mode="login" /> },
-  { path: "/register", element: <AuthPage mode="register" /> },
-  { path: "/", element: <HomePage /> },
-  { path: "/animes/:id", element: <AnimePage /> },
+  {
+    path: "/login",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <AuthPage mode="login" />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <AuthPage mode="register" />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <HomePage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/animes/:id",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <AnimePage />
+      </Suspense>
+    ),
+  },
   {
     path: "/favorites",
     element: (
       <ProtectedRoute>
-        {" "}
-        <FavoritePage />{" "}
+        <Suspense fallback={<LoadingSpinner />}>
+          <FavoritePage />
+        </Suspense>
       </ProtectedRoute>
     ),
   },
@@ -25,10 +58,18 @@ export const router = createBrowserRouter([
     path: "/profil",
     element: (
       <ProtectedRoute>
-        {" "}
-        <ProfilPage />{" "}
+        <Suspense fallback={<LoadingSpinner />}>
+          <ProfilPage />
+        </Suspense>
       </ProtectedRoute>
     ),
   },
-  { path: "/discover", element: <DiscoverPage /> },
+  {
+    path: "/discover",
+    element: (
+      <Suspense fallback={<LoadingSpinner />}>
+        <DiscoverPage />
+      </Suspense>
+    ),
+  },
 ]);
