@@ -1,11 +1,9 @@
-"use client";
-
 import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Toggle } from "@/components/ui/toggle";
 import { Bookmark, CheckCircle2, Eye, EyeOff } from "lucide-react";
-import { useFavorites } from "@/context/useFavorites";
+import { useFavoritesContext } from "@/context/useFavorites";
 import { useAuth } from "@/context/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -37,7 +35,8 @@ export default function AnimePage() {
   const progress =
     totalEpisodes > 0 ? Math.round((seenCount / totalEpisodes) * 100) : 0;
 
-  const { isFavorite, toggleFavorite, refreshFavorites } = useFavorites();
+  const { isFavorite, toggleFavorite, refreshFavorites } =
+    useFavoritesContext();
 
   useEffect(() => {
     setLoading(true);
@@ -102,12 +101,14 @@ export default function AnimePage() {
     );
 
     try {
-      await fetch(`${API_URL}/episodes/${epId}/watched`, {
+      const response = await fetch(`${API_URL}/episodes/${epId}/watched`, {
         method: wasSeen ? "DELETE" : "POST",
         credentials: "include",
       });
 
-      window.dispatchEvent(new Event("in-progress-updated"));
+      if (response.ok) {
+        window.dispatchEvent(new Event("in-progress-updated"));
+      }
     } catch (error) {
       console.error("Erreur vue épisode :", error);
       setEpisodes((prev) =>
@@ -238,7 +239,7 @@ export default function AnimePage() {
               <div className="w-full max-w-[400px] h-96 bg-white/5 rounded-xl" />
             ) : (
               anime && (
-                <div className="relative w-full max-w-[400px] rounded-xl overflow-hidden shadow-lg h-fit sticky top-24">
+                <div className="relative w-full max-w-[400px] rounded-xl overflow-hidden shadow-lg h-fit top-24">
                   <img
                     src={anime.image_url}
                     alt={anime.name}

@@ -44,6 +44,12 @@ export function useFavorites() {
         else newSet.delete(id);
         return newSet;
       });
+
+      window.dispatchEvent(
+        new CustomEvent("favorites-updated", {
+          detail: { animeId: id, isFavorite },
+        })
+      );
     } catch (err) {
       console.error("Erreur toggle favori:", err);
       throw err;

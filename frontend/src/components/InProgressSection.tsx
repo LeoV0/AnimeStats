@@ -13,6 +13,7 @@ interface Anime {
   image_url: string;
   description: string;
   lastSeenEpisode: number;
+  isFavorite?: boolean;
 }
 
 export default function InProgressSection() {
@@ -35,13 +36,13 @@ export default function InProgressSection() {
     fetchInProgress();
 
     const handleUpdate = () => {
-      console.log("Événement in-progress-updated reçu !");
+      setLoading(true);
       fetchInProgress();
     };
-
     window.addEventListener("in-progress-updated", handleUpdate);
-    return () =>
+    return () => {
       window.removeEventListener("in-progress-updated", handleUpdate);
+    };
   }, []);
 
   if (loading) return null;
@@ -49,7 +50,7 @@ export default function InProgressSection() {
   if (animes.length === 0) {
     return (
       <section className="py-16">
-        <div className="flex flex-col items-center justify-center w-full py-16 text-white">
+        <div className="flex flex-col justify-center items-center py-16 w-full text-white">
           <h2 className="mb-4 text-6xl font-extrabold tracking-wider text-center sm:text-8xl">
             進行中
           </h2>
@@ -58,7 +59,7 @@ export default function InProgressSection() {
           </p>
         </div>
 
-        <p className="max-w-md mx-auto mt-8 text-lg text-center text-gray-400">
+        <p className="mx-auto mt-8 max-w-md text-lg text-center text-gray-400">
           Commence à regarder un animé pour le voir ici !
         </p>
       </section>
@@ -67,7 +68,7 @@ export default function InProgressSection() {
 
   return (
     <section className="py-16">
-      <div className="flex flex-col items-center justify-center w-full py-16 text-white">
+      <div className="flex flex-col justify-center items-center py-16 w-full text-white">
         <h2 className="mb-4 text-6xl font-extrabold tracking-wider text-center sm:text-8xl">
           進行中
         </h2>
@@ -76,7 +77,7 @@ export default function InProgressSection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-items-center">
+      <div className="grid grid-cols-1 gap-8 justify-items-center sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         {animes.map((anime) => (
           <AnimeCard
             key={anime.id}
@@ -84,10 +85,11 @@ export default function InProgressSection() {
             title={anime.name}
             description={anime.description}
             image={anime.image_url}
-            showFavorite={false}
+            isFavorite={anime.isFavorite}
+            showFavorite={true}
             badge={
               <Badge className="text-green-400 border bg-green-500/20 border-green-500/50">
-                <div className="relative flex items-center">
+                <div className="flex relative items-center">
                   <div className="relative w-2 h-2 mr-1.5">
                     <div className="absolute inset-0 bg-green-400 rounded-full animate-pulse" />
                     <div className="absolute inset-0 bg-green-400 rounded-full opacity-75 animate-ping" />

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
-import { useFavorites } from "@/context/useFavorites";
+import { useFavoritesContext } from "@/context/useFavorites";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -14,14 +14,15 @@ interface Anime {
   isFavorite?: boolean;
 }
 
-interface AnimeListProps{
+interface AnimeListProps {
   endpoint?: string;
 }
 
-export default function AnimeList({endpoint = "/animes" }: AnimeListProps) {
+export default function AnimeList({ endpoint = "/animes" }: AnimeListProps) {
   const [animes, setAnimes] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
-  const { isFavorite, toggleFavorite, refreshFavorites } = useFavorites();
+  const { isFavorite, toggleFavorite, refreshFavorites } =
+    useFavoritesContext();
 
   useEffect(() => {
     async function fetchAnimes() {
@@ -39,6 +40,14 @@ export default function AnimeList({endpoint = "/animes" }: AnimeListProps) {
       }
     }
     fetchAnimes();
+
+    const handleFavoritesUpdate = () => {
+      fetchAnimes();
+    };
+
+    window.addEventListener("favorites-updated", handleFavoritesUpdate);
+    return () =>
+      window.removeEventListener("favorites-updated", handleFavoritesUpdate);
   }, [endpoint]);
 
   const handleToggle = async (animeId: string) => {
@@ -56,19 +65,19 @@ export default function AnimeList({endpoint = "/animes" }: AnimeListProps) {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center w-full h-64 text-neutral-400">
+      <div className="flex justify-center items-center w-full h-64 text-neutral-400">
         Chargement...
       </div>
     );
   if (!animes.length)
     return (
-      <div className="flex items-center justify-center w-full h-64 text-neutral-400">
+      <div className="flex justify-center items-center w-full h-64 text-neutral-400">
         Aucun animé
       </div>
     );
 
   return (
-    <div className="grid grid-cols-1 gap-8 py-16 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-items-center">
+    <div className="grid grid-cols-1 gap-8 justify-items-center py-16 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {animes.map((anime) => (
         <AnimeCard
           key={anime.id}

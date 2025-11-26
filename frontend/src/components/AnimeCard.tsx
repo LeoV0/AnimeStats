@@ -1,12 +1,10 @@
-"use client";
-
 import { Tilt } from "@/components/ui/tilt";
 import { Toggle } from "@/components/ui/toggle";
 import { Bookmark } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useFavorites } from "@/context/useFavorites";
+import { useFavoritesContext } from "@/context/useFavorites";
 import { useAuth } from "@/context/useAuth";
 
 import { useNavigate } from "react-router-dom";
@@ -34,7 +32,7 @@ export default function AnimeCard({
   progress,
   onToggleFavorite,
 }: AnimeCardProps) {
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { isFavorite, toggleFavorite } = useFavoritesContext();
 
   const currentFavorite = propIsFavorite ?? isFavorite(id);
 
@@ -77,7 +75,11 @@ export default function AnimeCard({
           <h3 className="text-lg font-semibold text-white line-clamp-2">
             {title}
           </h3>
-          {progress && <p className="mt-1 text-xs text-white">{progress}</p>}
+          {progress && (
+            <p className="absolute right-3 bottom-3 z-10 px-2 py-1 text-xs text-white">
+              {progress}
+            </p>
+          )}
           {showFavorite && (
             <Toggle
               pressed={currentFavorite}
@@ -96,7 +98,6 @@ export default function AnimeCard({
         </div>
 
         <p className="text-sm text-neutral-300 line-clamp-3">{description}</p>
-
         <Button
           variant="secondary"
           className="px-4 py-1 mt-2 text-sm text-white rounded-lg border cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20"

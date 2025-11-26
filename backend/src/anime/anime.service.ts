@@ -75,16 +75,24 @@ export class AnimeService {
           take: 1,
         },
       },
-      take: 6,
     });
 
-    return animes.map((a) => ({
-      id: a.id.toString(),
-      name: a.name,
-      name_japanese: a.name_japanese,
-      image_url: a.image_url,
-      lastSeenEpisode: a.episodes[0]?.number || 0,
-    }));
+    const result = await Promise.all(
+      animes.map(async (a) => {
+        const isFav = await this.isFavorite(userId, a.id);
+        return {
+          id: a.id.toString(),
+          name: a.name,
+          name_japanese: a.name_japanese,
+          image_url: a.image_url,
+          description: a.description,
+          lastSeenEpisode: a.episodes[0]?.number || 0,
+          isFavorite: isFav,
+        };
+      }),
+    );
+
+    return result;
   }
 
   async getCompleted(userId: bigint) {

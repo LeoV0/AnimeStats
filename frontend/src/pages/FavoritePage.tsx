@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
 import Page1 from "@/components/glow-menu";
-import { useFavorites } from "@/context/useFavorites";
+import { useFavoritesContext } from "@/context/useFavorites";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -17,7 +17,7 @@ interface Anime {
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
-  const { refreshFavorites, toggleFavorite } = useFavorites();
+  const { toggleFavorite } = useFavoritesContext();
 
   useEffect(() => {
     async function fetchFavorites() {
@@ -33,7 +33,6 @@ export default function FavoritesPage() {
         console.error("Erreur favoris:", err);
       } finally {
         setLoading(false);
-        refreshFavorites();
       }
     }
 

@@ -2,12 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import AnimeCard from "@/components/AnimeCard";
-import { useFavorites } from "@/context/useFavorites";
-import {
-  motion,
-  useAnimationFrame,
-  useMotionValue,
-} from "framer-motion";
+import { useFavoritesContext } from "@/context/useFavorites";
+import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -30,8 +26,9 @@ export default function InfiniteScrollCarousel({
 }: InfiniteScrollCarouselProps) {
   const [animes, setAnimes] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
-  const { isFavorite, toggleFavorite, refreshFavorites } = useFavorites();
-  
+  const { isFavorite, toggleFavorite, refreshFavorites } =
+    useFavoritesContext();
+
   const [width, setWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -54,27 +51,35 @@ export default function InfiniteScrollCarousel({
       }
     }
     fetchAnimes();
+
+    const handleFavoritesUpdate = () => {
+      fetchAnimes();
+    };
+
+    window.addEventListener("favorites-updated", handleFavoritesUpdate);
+    return () =>
+      window.removeEventListener("favorites-updated", handleFavoritesUpdate);
   }, [endpoint]);
 
   useEffect(() => {
     if (carouselRef.current) {
-        const measuredWidth = carouselRef.current.offsetWidth;
-        setWidth(measuredWidth);
-        x.set(-measuredWidth);
+      const measuredWidth = carouselRef.current.offsetWidth;
+      setWidth(measuredWidth);
+      x.set(-measuredWidth);
     }
   }, [animes, x]);
 
   useAnimationFrame((_, delta) => {
     if (isHovered || isDragging || width === 0) return;
 
-    const moveBy = baseVelocity * (delta / 1000) * 60; 
+    const moveBy = baseVelocity * (delta / 1000) * 60;
     let newX = x.get() - moveBy;
 
     if (newX <= -2 * width) {
-        newX += width;
+      newX += width;
     }
     if (newX > 0) {
-        newX -= width;
+      newX -= width;
     }
 
     x.set(newX);
@@ -100,12 +105,14 @@ export default function InfiniteScrollCarousel({
   if (!animes.length) return null;
 
   return (
-    <div 
-        className="overflow-hidden relative py-10 w-full cursor-grab active:cursor-grabbing"
-        style={{
-            maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-            WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-        }}
+    <div
+      className="overflow-hidden relative py-10 w-full cursor-grab active:cursor-grabbing"
+      style={{
+        maskImage:
+          "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+      }}
     >
       <motion.div
         className="flex w-max"
@@ -117,27 +124,34 @@ export default function InfiniteScrollCarousel({
         onDragEnd={() => setIsDragging(false)}
       >
         {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="flex gap-8 pr-8" ref={i === 0 ? carouselRef : null}>
-                {animes.map((anime) => (
-                <div key={`${i}-${anime.id}`} className="pointer-events-none shrink-0">
-                    <div 
-                        className="pointer-events-auto"
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <AnimeCard
-                        id={anime.id}
-                        title={anime.name}
-                        description={anime.description}
-                        image={anime.image_url}
-                        isFavorite={isFavorite(anime.id)}
-                        showFavorite={true}
-                        onToggleFavorite={() => handleToggle(anime.id)}
-                        />
-                    </div>
+          <div
+            key={i}
+            className="flex gap-8 pr-8"
+            ref={i === 0 ? carouselRef : null}
+          >
+            {animes.map((anime) => (
+              <div
+                key={`${i}-${anime.id}`}
+                className="pointer-events-none shrink-0"
+              >
+                <div
+                  className="pointer-events-auto"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <AnimeCard
+                    id={anime.id}
+                    title={anime.name}
+                    description={anime.description}
+                    image={anime.image_url}
+                    isFavorite={isFavorite(anime.id)}
+                    showFavorite={true}
+                    onToggleFavorite={() => handleToggle(anime.id)}
+                  />
                 </div>
-                ))}
-            </div>
+              </div>
+            ))}
+          </div>
         ))}
       </motion.div>
     </div>
