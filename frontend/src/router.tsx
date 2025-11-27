@@ -10,10 +10,11 @@ const AnimePage = React.lazy(() => import("./pages/AnimePage"));
 const FavoritePage = React.lazy(() => import("./pages/FavoritePage"));
 const ProfilPage = React.lazy(() => import("./pages/ProfilPage"));
 const DiscoverPage = React.lazy(() => import("./pages/DiscoverPage"));
+import GlobalWrapper from "./components/GlobalWrapper";
 
 export const router = createBrowserRouter([
   {
-    element: <Layout />,
+    element: <GlobalWrapper />,
     children: [
       {
         path: "/login",
@@ -32,48 +33,53 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/",
-        element: (
-          <Suspense fallback={<LoadingSpinner />}>
-            <HomePage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/animes/:id",
-        element: (
-          <Suspense fallback={<LoadingSpinner />}>
-            <AnimePage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/favorites",
-        element: (
-          <ProtectedRoute>
-            <Suspense fallback={<LoadingSpinner />}>
-              <FavoritePage />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/profil",
-        element: (
-          <ProtectedRoute>
-            <Suspense fallback={<LoadingSpinner />}>
-              <ProfilPage />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/discover",
-        element: (
-          <Suspense fallback={<LoadingSpinner />}>
-            <DiscoverPage />
-          </Suspense>
-        ),
+        element: <Layout />,
+        children: [
+          {
+            path: "/",
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <HomePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/animes/:id",
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <AnimePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/favorites",
+            element: (
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <FavoritePage />
+                </Suspense>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/profil",
+            element: (
+              <ProtectedRoute>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <ProfilPage />
+                </Suspense>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/discover",
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <DiscoverPage />
+              </Suspense>
+            ),
+          },
+        ],
       },
     ],
   },
