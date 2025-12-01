@@ -15,6 +15,9 @@ const mockPrismaService = {
     create: jest.fn(),
     delete: jest.fn(),
   },
+  episode: {
+    findMany: jest.fn(),
+  },
 };
 
 type AnimeDto = {
@@ -281,7 +284,61 @@ describe('AnimeService', () => {
       });
     });
   });
+
+  describe('getAllEpisodes', () => {
+    it("doit retourner tous les épisodes d'un animé", async () => {
+      const animeId = 10n;
+
+      mockPrismaService.anime.findUnique.mockResolvedValueOnce({ id: animeId });
+
+      const episodesFromDb = [
+        {
+          id: 1n,
+          number: 1,
+          title: 'To You, in 2000 Years: The Fall of Shiganshina, Part 1',
+          anime_id: animeId,
+          user_progression: [],
+        },
+        {
+          id: 2n,
+          number: 2,
+          title: 'That Day',
+          anime_id: animeId,
+          user_progression: [],
+        },
+      ];
+
+      mockPrismaService.episode.findMany.mockResolvedValueOnce(episodesFromDb);
+
+      const resultat = await service.getAllEpisodes(animeId);
+
+      expect(resultat).toHaveLength(2);
+      expect(resultat[0]).toEqual({
+        id: '1',
+        number: 1,
+        title: 'To You, in 2000 Years: The Fall of Shiganshina, Part 1',
+        anime_id: '10',
+        seen: false,
+      });
+      expect(resultat[1]).toEqual({
+        id: '2',
+        number: 2,
+        title: 'That Day',
+        anime_id: '10',
+        seen: false,
+      });
+    });
+
+    it("doit lancer NotFoundException si l'anime n'existe pas", async () => {
+      const animeId = 999n;
+
+      mockPrismaService.episode.findMany.mockResolvedValueOnce([]);
+
+      const resultat = await service.getAllEpisodes(animeId);
+
+      expect(resultat).toEqual([]);
+    });
+  });
   // Les tests qui restent à faire :
-  // getAllEpisodes
   // getInProgress
 });
