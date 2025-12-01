@@ -11,9 +11,19 @@ const mockPrismaService = {
   },
   favorite: {
     findUnique: jest.fn(),
+    findMany: jest.fn(),
     create: jest.fn(),
     delete: jest.fn(),
   },
+};
+
+type AnimeDto = {
+  id: bigint;
+  name: string;
+  name_japanese: string;
+  image_url: string;
+  description: string;
+  total_episodes: number;
 };
 
 describe('AnimeService', () => {
@@ -178,8 +188,53 @@ describe('AnimeService', () => {
       expect(resultat).toHaveLength(2);
     });
   });
+
+  describe('getUserFavorites', () => {
+    const userId = 777n;
+    it("Doit retourner les animés favoris de l'utilisateur", async () => {
+      const favorites = [
+        {
+          anime: {
+            id: 1n,
+            name: 'One Piece',
+            name_japanese: 'ワンピース',
+            image_url: 'https://example.com/op.jpg',
+            description: 'Les pirates du chapeau de paille',
+            total_episodes: 1100,
+          },
+        },
+        {
+          anime: {
+            id: 2n,
+            name: 'Attack on Titan',
+            name_japanese: '進撃の巨人',
+            image_url: 'https://example.com/aot.jpg',
+            description: 'Des gros titans qui mangent les gens',
+            total_episodes: 89,
+          },
+        },
+      ];
+      mockPrismaService.favorite.findMany.mockResolvedValue(favorites);
+      const resultat = (await service.getUserFavorites(userId)).map(
+        (f) => f.anime,
+      ) as AnimeDto[];
+      expect(resultat).toHaveLength(2);
+      expect(resultat[0]).toEqual({
+        id: 1n,
+        name: 'One Piece',
+        name_japanese: 'ワンピース',
+        image_url: 'https://example.com/op.jpg',
+        description: 'Les pirates du chapeau de paille',
+        total_episodes: 1100,
+      });
+      expect(resultat[1].id).toBe(2n);
+      expect(mockPrismaService.favorite.findMany).toHaveBeenCalledWith({
+        where: { user_id: userId },
+        include: { anime: true },
+      });
+    });
+  });
   // Les tests qui restent à faire :
-  // getUserFavorites
   // getCompleted
   // getAllEpisodes
   // getInProgress
