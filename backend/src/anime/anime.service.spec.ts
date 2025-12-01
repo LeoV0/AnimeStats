@@ -234,8 +234,54 @@ describe('AnimeService', () => {
       });
     });
   });
+
+  describe('getCompleted', () => {
+    it("Doit retourner les animés complétés par l'utilisateur", async () => {
+      const userId = 1n;
+      const completedAnimes = [
+        {
+          id: 1n,
+          name: 'One Piece',
+          name_japanese: 'ワンピース',
+          image_url: 'img1.jpg',
+          total_episodes: 1000,
+        },
+        {
+          id: 2n,
+          name: 'Naruto',
+          name_japanese: 'ナルト',
+          image_url: 'img2.jpg',
+          total_episodes: 720,
+        },
+      ];
+
+      mockPrismaService.anime.findMany.mockResolvedValue(completedAnimes);
+
+      const result = await service.getCompleted(userId);
+
+      expect(result).toHaveLength(2);
+      expect(result[0]).toEqual({
+        id: '1',
+        name: 'One Piece',
+        name_japanese: 'ワンピース',
+        image_url: 'img1.jpg',
+        totalEpisodes: 1000,
+      });
+      expect(result[1].id).toBe('2');
+
+      expect(mockPrismaService.anime.findMany).toHaveBeenCalledWith({
+        where: {
+          user_status: {
+            some: {
+              user_id: userId,
+              status: 'COMPLETED',
+            },
+          },
+        },
+      });
+    });
+  });
   // Les tests qui restent à faire :
-  // getCompleted
   // getAllEpisodes
   // getInProgress
 });
