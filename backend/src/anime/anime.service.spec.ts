@@ -1,4 +1,3 @@
-// anime.service.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { AnimeService } from './anime.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -339,6 +338,88 @@ describe('AnimeService', () => {
       expect(resultat).toEqual([]);
     });
   });
-  // Les tests qui restent à faire :
-  // getInProgress
+  
+  describe('getInProgress', () => {
+    it('Doit retourner les animés en cours de visionnage avec la progression et le statut favori', async () => {
+      const userId = 1n;
+      const animesInProgress = [
+        {
+          id: 1n,
+          name: 'One Piece',
+          name_japanese: 'ワンピース',
+          image_url: 'img1.jpg',
+          description: 'Pirates',
+          episodes: [{ number: 1050 }],
+        },
+        {
+          id: 2n,
+          name: 'Naruto',
+          name_japanese: 'ナルト',
+          image_url: 'img2.jpg',
+          description: 'Ninjas',
+          episodes: [],
+        },
+      ];
+
+      mockPrismaService.anime.findMany.mockResolvedValue(animesInProgress);
+
+      mockPrismaService.favorite.findUnique.mockImplementation(
+        (args: { where: { user_id_anime_id: { anime_id: bigint } } }) => {
+          const { where } = args;
+          if (
+            where.user_id_anime_id &&
+            where.user_id_anime_id.anime_id === 1n
+          ) {
+            return Promise.resolve({ user_id: userId, anime_id: 1n });
+          }
+          return Promise.resolve(null);
+        },
+      );
+
+      const result = await service.getInProgress(userId);
+
+      expect(result).toHaveLength(2);
+
+      expect(result[0]).toEqual({
+        id: '1',
+        name: 'One Piece',
+        name_japanese: 'ワンピース',
+        image_url: 'img1.jpg',
+        description: 'Pirates',
+        lastSeenEpisode: 1050,
+        isFavorite: true,
+      });
+
+      expect(result[1]).toEqual({
+        id: '2',
+        name: 'Naruto',
+        name_japanese: 'ナルト',
+        image_url: 'img2.jpg',
+        description: 'Ninjas',
+        lastSeenEpisode: 0,
+        isFavorite: false,
+      });
+
+      expect(mockPrismaService.anime.findMany).toHaveBeenCalledWith({
+        where: {
+          user_status: {
+            some: {
+              user_id: userId,
+              status: 'WATCHING',
+            },
+          },
+        },
+        include: {
+          episodes: {
+            where: {
+              user_progression: { some: { user_id: userId, seen: true } },
+            },
+            select: { number: true },
+            orderBy: { number: 'desc' },
+            take: 1,
+          },
+        },
+      });
+    });
+  });
 });
