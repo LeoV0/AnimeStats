@@ -7,6 +7,7 @@ import {
   NotFoundException,
   Delete,
   UnauthorizedException,
+  Query,
 } from '@nestjs/common';
 import { AnimeService } from './anime.service';
 import { Param } from '@nestjs/common';
@@ -27,10 +28,19 @@ export class AnimeController {
 
   @UseGuards(OptionalJwtAuthGuard)
   @Get()
-  async getAllAnimes(@Req() req: JwtRequest) {
+  async getAllAnimes(
+    @Req() req: JwtRequest,
+    @Query('tags') tagsQuery?: string,
+  ) {
     console.log('GET /animes called');
     console.log('User in request:', req.user);
-    const animes = await this.animeService.findAll();
+    console.log('Tags query:', tagsQuery);
+
+    const tags = tagsQuery
+      ? tagsQuery.split(',').map((tag) => tag.trim())
+      : undefined;
+
+    const animes = await this.animeService.findAll(tags);
     const userId = req.user ? BigInt(req.user.id) : null;
 
     const result = await Promise.all(

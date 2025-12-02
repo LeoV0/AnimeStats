@@ -6,8 +6,17 @@ import { Anime, Favorite } from '@prisma/client';
 export class AnimeService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(): Promise<Anime[]> {
-    return this.prisma.anime.findMany();
+  findAll(tags?: string[]): Promise<Anime[]> {
+    return this.prisma.anime.findMany({
+      where:
+        tags && tags.length > 0
+          ? {
+              tags: {
+                hasSome: tags,
+              },
+            }
+          : undefined,
+    });
   }
 
   async isFavorite(userId: bigint, animeId: bigint): Promise<boolean> {

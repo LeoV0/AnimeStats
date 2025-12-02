@@ -1,83 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
 import { useFavoritesContext } from "@/context/useFavorites";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 interface Anime {
   id: string;
   name: string;
   description: string;
   image_url: string;
+  tags?: string[];
   isFavorite?: boolean;
 }
 
 interface AnimeListProps {
-  endpoint?: string;
+  animes?: Anime[];
+  hasActiveFilters?: boolean;
+  isDataLoaded?: boolean;
 }
 
-export default function AnimeList({ endpoint = "/animes" }: AnimeListProps) {
-  const [animes, setAnimes] = useState<Anime[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { isFavorite, toggleFavorite, refreshFavorites } =
-    useFavoritesContext();
-
-  useEffect(() => {
-    async function fetchAnimes() {
-      try {
-        const res = await fetch(`${API_URL}${endpoint}`, {
-          credentials: "include",
-        });
-        const data = await res.json();
-        setAnimes(data);
-      } catch (error) {
-        console.error("Erreur :", error);
-      } finally {
-        setLoading(false);
-        refreshFavorites();
-      }
-    }
-    fetchAnimes();
-
-    const handleFavoritesUpdate = () => {
-      fetchAnimes();
-    };
-
-    window.addEventListener("favorites-updated", handleFavoritesUpdate);
-    return () =>
-      window.removeEventListener("favorites-updated", handleFavoritesUpdate);
-  }, [endpoint]);
+export default function AnimeList({
+  animes = [],
+  hasActiveFilters = false,
+  isDataLoaded = false,
+}: AnimeListProps) {
+  const { isFavorite, toggleFavorite } = useFavoritesContext();
 
   const handleToggle = async (animeId: string) => {
-    const current = isFavorite(animeId);
-    const newState = !current;
-    try {
-      await toggleFavorite(animeId, newState);
-      setAnimes((prev) =>
-        prev.map((a) => (a.id === animeId ? { ...a, isFavorite: newState } : a))
-      );
-    } catch (err) {
-      console.error("Erreur favori :", err);
-    }
+    await toggleFavorite(animeId, !isFavorite(animeId));
   };
 
-  if (loading)
+  if (!isDataLoaded) {
+    return null;
+  }
+
+  if (animes.length === 0 && hasActiveFilters) {
     return (
-      <div className="flex justify-center items-center w-full h-64 text-neutral-400">
-        Chargement...
+      <div className="py-32 text-center">
+        <p className="text-2xl font-light text-neutral-500">
+          Aucun animé ne correspond à vos filtres
+        </p>
+        <p className="mt-4 text-neutral-600">Essayez d'enlever quelques tags</p>
       </div>
     );
-  if (!animes.length)
-    return (
-      <div className="flex justify-center items-center w-full h-64 text-neutral-400">
-        Aucun animé
-      </div>
-    );
+  }
 
   return (
-    <div className="grid grid-cols-1 gap-8 justify-items-center py-16 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-10 justify-items-center sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {animes.map((anime) => (
         <AnimeCard
           key={anime.id}
