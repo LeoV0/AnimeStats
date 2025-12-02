@@ -338,7 +338,6 @@ describe('AnimeService', () => {
       expect(resultat).toEqual([]);
     });
   });
-  
   describe('getInProgress', () => {
     it('Doit retourner les animés en cours de visionnage avec la progression et le statut favori', async () => {
       const userId = 1n;

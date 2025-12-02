@@ -26,6 +26,11 @@ enum UserAnimeStatusEnum {
   PLAN_TO_WATCH
 }
 
+enum AnimeType {
+  ANIME
+  MOVIE
+}
+
 model User {
   id BigInt @id @default(autoincrement())
   name String
@@ -46,6 +51,9 @@ model Anime {
   image_url String
   status AnimeStatus
   total_episodes Int
+  type AnimeType @default(ANIME)
+  studio String?
+  tags String[] @default([])
   created_at DateTime @default(now())
   episodes Episode[]
   favorites Favorite[]

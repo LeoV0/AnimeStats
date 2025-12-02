@@ -6,7 +6,10 @@ import { UserAnimeStatusEnum } from '@prisma/client';
 export class EpisodesService {
   constructor(private prisma: PrismaService) {}
 
-  async episodeAddWatched(userId: bigint, episodeId: bigint): Promise<any> {
+  async episodeAddWatched(
+    userId: bigint,
+    episodeId: bigint,
+  ): Promise<{ message: string }> {
     const episode = await this.prisma.episode.findUnique({
       where: { id: episodeId },
       include: { anime: true },
@@ -36,7 +39,10 @@ export class EpisodesService {
     return { message: 'Episode marked as watched' };
   }
 
-  async episodeDelWatched(userId: bigint, episodeId: bigint): Promise<any> {
+  async episodeDelWatched(
+    userId: bigint,
+    episodeId: bigint,
+  ): Promise<{ message: string }> {
     const episode = await this.prisma.episode.findUnique({
       where: { id: episodeId },
       include: { anime: true },
