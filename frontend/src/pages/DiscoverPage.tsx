@@ -90,7 +90,7 @@ export default function DiscoverPage() {
   const hasMoreTags = allTags.length > 12;
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-black via-[#0B0F14] to-[#1A2428] text-white">
+    <div className="relative min-h-screen bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-white">
       <div className="flex fixed inset-x-0 top-4 z-50 justify-center pointer-events-none">
         <div className="px-6 w-full max-w-6xl pointer-events-auto">
           <Page1 />
@@ -127,6 +127,7 @@ export default function DiscoverPage() {
                           <button
                             onClick={() => removeTag(tag.id)}
                             className="p-1 rounded-full transition hover:bg-white/20"
+                            aria-label={`Retirer le tag ${tag.label}`}
                           >
                             <X className="w-3 h-3" />
                           </button>

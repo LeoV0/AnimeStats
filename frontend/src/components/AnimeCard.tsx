@@ -84,6 +84,9 @@ export default function AnimeCard({
             <Toggle
               pressed={currentFavorite}
               onPressedChange={handleToggle}
+              aria-label={
+                currentFavorite ? "Retirer des favoris" : "Ajouter aux favoris"
+              }
               className="p-1 rounded-full cursor-pointer bg-white/10 hover:bg-white/20"
             >
               <Bookmark
@@ -100,6 +103,7 @@ export default function AnimeCard({
         <p className="text-sm text-neutral-300 line-clamp-3">{description}</p>
         <Button
           variant="secondary"
+          asChild
           className="px-4 py-1 mt-2 text-sm text-white rounded-lg border cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20"
         >
           <Link to={`/animes/${id}`}>Lire plus</Link>

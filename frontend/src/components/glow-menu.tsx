@@ -34,7 +34,12 @@ const glowVariants = {
     scale: 2,
     transition: {
       opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const },
-      scale: { duration: 0.5, type: "spring" as const, stiffness: 300, damping: 25 },
+      scale: {
+        duration: 0.5,
+        type: "spring" as const,
+        stiffness: 300,
+        damping: 25,
+      },
     },
   },
 };
@@ -107,8 +112,6 @@ function MenuBar() {
         },
   ];
 
-
-
   return (
     <motion.nav
       className="overflow-hidden relative p-2 rounded-2xl shadow-lg backdrop-blur-lg bg-linear-to-b from-background/80 to-background/40"
@@ -146,6 +149,7 @@ function MenuBar() {
                 className="flex relative z-10 gap-2 items-center px-4 py-2 bg-transparent rounded-xl transition-colors text-muted-foreground group-hover:text-foreground"
                 variants={itemVariants}
                 transition={sharedTransition}
+                aria-label={item.label}
                 style={{
                   transformStyle: "preserve-3d",
                   transformOrigin: "center bottom",
@@ -163,6 +167,7 @@ function MenuBar() {
                 className="flex absolute inset-0 z-10 gap-2 justify-center items-center px-4 py-2 bg-transparent rounded-xl transition-colors text-muted-foreground group-hover:text-foreground md:justify-start"
                 variants={backVariants}
                 transition={sharedTransition}
+                aria-label={item.label}
                 style={{
                   transformStyle: "preserve-3d",
                   transformOrigin: "center top",
