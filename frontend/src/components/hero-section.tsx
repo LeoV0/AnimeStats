@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Shape, ExtrudeGeometry, MeshPhysicalMaterial, Color } from "three";
+import * as THREE from "three";
 
 const AnimatedBoxes = () => {
-  const groupRef = useRef<any>();
+  const groupRef = useRef<THREE.Group>(null);
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     if (groupRef.current) {
       groupRef.current.rotation.x += delta * 0.05;
     }

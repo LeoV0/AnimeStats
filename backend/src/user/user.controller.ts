@@ -21,12 +21,15 @@ interface JwtRequest extends Request {
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAllUsers() {
     const users = await this.userService.findAll();
     return users.map((user) => ({
-      ...user,
       id: user.id.toString(),
+      name: user.name,
+      email: user.email,
+      created_at: user.created_at,
     }));
   }
 
@@ -50,8 +53,10 @@ export class UserController {
   async getUserById(@Param('id') id: string) {
     const user = await this.userService.findById(BigInt(id));
     return {
-      ...user,
       id: user.id.toString(),
+      name: user.name,
+      email: user.email,
+      created_at: user.created_at,
     };
   }
 

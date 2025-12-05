@@ -12,8 +12,14 @@ import {
 type TiltProps = {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   rotationFactor?: number;
   isRevese?: boolean;
+  springOptions?: {
+    stiffness?: number;
+    damping?: number;
+    mass?: number;
+  };
 };
 
 export function Tilt({
