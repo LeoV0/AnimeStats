@@ -11,6 +11,7 @@ const FavoritePage = React.lazy(() => import("./pages/FavoritePage"));
 const ProfilPage = React.lazy(() => import("./pages/ProfilPage"));
 const DiscoverPage = React.lazy(() => import("./pages/DiscoverPage"));
 import GlobalWrapper from "./components/GlobalWrapper";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +77,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingSpinner />}>
                 <DiscoverPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: "*",
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <NotFoundPage />
               </Suspense>
             ),
           },
