@@ -3,6 +3,8 @@ import { UserService } from './user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 
+const MOCK_PASSWORD_HASH = 'hashed_password_for_testing';
+
 const mockPrisma = {
   user: {
     findMany: jest.fn(),
@@ -38,7 +40,7 @@ describe('UserService', () => {
         id: 3n,
         name: 'Léo',
         email: 'leo@gmail.com',
-        password_hash: 'hashed',
+        password_hash: MOCK_PASSWORD_HASH,
         created_at: new Date(),
         updated_at: new Date(),
       };
@@ -61,7 +63,88 @@ describe('UserService', () => {
 
   describe('getProgressId', () => {
     it('Doit retourner un tableau de progressions', async () => {
-      // A finir !!
+      const mockWatchedEpisodes = [
+        {
+          user_id: 3n,
+          episode_id: 1n,
+          seen: true,
+          episode: {
+            id: 1n,
+            number: 1,
+            anime_id: 10n,
+            anime: {
+              id: 10n,
+              name: 'One Piece',
+            },
+          },
+        },
+        {
+          user_id: 3n,
+          episode_id: 2n,
+          seen: true,
+          episode: {
+            id: 2n,
+            number: 2,
+            anime_id: 10n,
+            anime: {
+              id: 10n,
+              name: 'One Piece',
+            },
+          },
+        },
+        {
+          user_id: 3n,
+          episode_id: 3n,
+          seen: false,
+          episode: {
+            id: 3n,
+            number: 1,
+            anime_id: 20n,
+            anime: {
+              id: 20n,
+              name: 'Naruto',
+            },
+          },
+        },
+      ];
+
+      mockPrisma.user_episode_progression.findMany.mockResolvedValue(
+        mockWatchedEpisodes,
+      );
+
+      const resultat = await service.getProgressById(3n);
+
+      expect(mockPrisma.user_episode_progression.findMany).toHaveBeenCalledWith(
+        {
+          where: { user_id: 3n },
+          include: { episode: { include: { anime: true } } },
+        },
+      );
+
+      expect(resultat).toHaveLength(2);
+      expect(resultat).toEqual([
+        {
+          anime_id: '10',
+          anime_name: 'One Piece',
+          episodes: [
+            { id: '1', number: 1, seen: true },
+            { id: '2', number: 2, seen: true },
+          ],
+        },
+        {
+          anime_id: '20',
+          anime_name: 'Naruto',
+          episodes: [{ id: '3', number: 1, seen: false }],
+        },
+      ]);
+    });
+
+    it('Doit retourner un tableau vide si aucune progression', async () => {
+      mockPrisma.user_episode_progression.findMany.mockResolvedValue([]);
+
+      const resultat = await service.getProgressById(3n);
+
+      expect(resultat).toEqual([]);
     });
   });
 });
