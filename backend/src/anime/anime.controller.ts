@@ -32,10 +32,6 @@ export class AnimeController {
     @Req() req: JwtRequest,
     @Query('tags') tagsQuery?: string,
   ) {
-    console.log('GET /animes called');
-    console.log('User in request:', req.user);
-    console.log('Tags query:', tagsQuery);
-
     const tags = tagsQuery
       ? tagsQuery.split(',').map((tag) => tag.trim())
       : undefined;

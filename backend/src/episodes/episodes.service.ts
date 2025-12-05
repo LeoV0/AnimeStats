@@ -30,11 +30,7 @@ export class EpisodesService {
       data: { user_id: userId, episode_id: episodeId, seen: true },
     });
 
-    await this.updateAnimeStatus(
-      userId,
-      episode.anime_id,
-      episode.anime.total_episodes,
-    );
+    await this.updateAnimeStatus(userId, episode.anime_id);
 
     return { message: 'Episode marked as watched' };
   }
@@ -62,20 +58,12 @@ export class EpisodesService {
       where: { user_id_episode_id: { user_id: userId, episode_id: episodeId } },
     });
 
-    await this.updateAnimeStatus(
-      userId,
-      episode.anime_id,
-      episode.anime.total_episodes,
-    );
+    await this.updateAnimeStatus(userId, episode.anime_id);
 
     return { message: 'Episode marked as unwatched' };
   }
 
-  private async updateAnimeStatus(
-    userId: bigint,
-    animeId: bigint,
-    totalEpisodes: number,
-  ) {
+  private async updateAnimeStatus(userId: bigint, animeId: bigint) {
     const seenCount = await this.prisma.user_episode_progression.count({
       where: {
         user_id: userId,
@@ -88,29 +76,15 @@ export class EpisodesService {
       where: { anime_id: animeId },
     });
 
-    console.log(
-      `Anime ${animeId}: seenCount=${seenCount}, totalEpisodes=${totalEpisodes}, availableInDB=${availableEpisodesCount}`,
-    );
-
     let newStatus: UserAnimeStatusEnum = UserAnimeStatusEnum.WATCHING;
 
     if (availableEpisodesCount > 0 && seenCount >= availableEpisodesCount) {
       newStatus = UserAnimeStatusEnum.COMPLETED;
-      console.log(
-        `Anime ${animeId} marked as COMPLETED (all available episodes seen)`,
-      );
     } else if (seenCount === 0) {
-      console.log(
-        `[DEBUG] Anime ${animeId} has no seen episodes, deleting status`,
-      );
       await this.prisma.user_anime_status.deleteMany({
         where: { user_id: userId, anime_id: animeId },
       });
       return;
-    } else {
-      console.log(
-        `Anime ${animeId} marked as WATCHING (${seenCount}/${availableEpisodesCount} available episodes)`,
-      );
     }
 
     const existingStatus = await this.prisma.user_anime_status.findFirst({
@@ -122,9 +96,6 @@ export class EpisodesService {
         where: { id: existingStatus.id },
         data: { status: newStatus },
       });
-      console.log(
-        `Updated existing status for anime ${animeId} to ${newStatus}`,
-      );
     } else {
       await this.prisma.user_anime_status.create({
         data: {
@@ -133,9 +104,6 @@ export class EpisodesService {
           status: newStatus,
         },
       });
-      console.log(
-        `Created new status for anime ${animeId} with status ${newStatus}`,
-      );
     }
   }
 }
