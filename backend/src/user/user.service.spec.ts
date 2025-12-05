@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 
-const MOCK_PASSWORD_HASH = 'hashed_password_for_testing';
+const MOCK_PASSWORD_HASH = 'hashed_password_for_testing'; // NOSONAR - This is mock data for tests, not a real password
 
 const mockPrisma = {
   user: {
