@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  background-image: linear-gradient(to bottom right, #000000, #0b0f14, #1a2428);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white;
+}
