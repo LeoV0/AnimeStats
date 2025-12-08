@@ -58,7 +58,10 @@ export default function FavoritesPage() {
 
           {loading && (
             <div className="flex justify-center py-20">
-              <p className="text-neutral-400">Chargement de tes favoris...</p>
+              <div className="flex flex-col gap-4 items-center">
+                <div className="w-12 h-12 rounded-full border-4 animate-spin border-white/20 border-t-white/80"></div>
+                <p className="text-neutral-400">Chargement de tes favoris...</p>
+              </div>
             </div>
           )}
 

@@ -92,7 +92,10 @@ export default function ProfilePage() {
       <div className="relative z-10 p-6 pt-40">
         <div className="mx-auto max-w-6xl">
           {loading ? (
-            <p className="text-xl text-gray-400">Chargement...</p>
+            <div className="flex flex-col gap-4 items-center py-20">
+              <div className="w-12 h-12 rounded-full border-4 animate-spin border-white/20 border-t-white/80"></div>
+              <p className="text-xl text-gray-400">Chargement...</p>
+            </div>
           ) : user ? (
             <>
               <p className="mb-2 text-xl text-gray-400">あなたのプロフィール</p>
