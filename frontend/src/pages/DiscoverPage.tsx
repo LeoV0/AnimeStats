@@ -9,8 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo, useEffect } from "react";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { api } from "@/lib/api";
 
 interface Anime {
   id: string;
@@ -37,9 +36,7 @@ export default function DiscoverPage() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch(`${API_URL}/animes`, {
-          credentials: "include",
-        });
+        const res = await api(`/animes`);
         if (!res.ok) return;
         const data: Anime[] = await res.json();
 

@@ -6,8 +6,7 @@ import { Bookmark, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { useFavoritesContext } from "@/context/useFavorites";
 import { useAuth } from "@/context/useAuth";
 import { useNavigate } from "react-router-dom";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { api } from "@/lib/api";
 
 interface Episode {
   id: string;
@@ -41,9 +40,7 @@ export default function AnimePage() {
   useEffect(() => {
     setLoading(true);
 
-    const fetchAnime = fetch(`${API_URL}/animes/${id}`, {
-      credentials: "include",
-    })
+    const fetchAnime = api(`/animes/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Anime non trouvé");
         return res.json();
@@ -51,9 +48,7 @@ export default function AnimePage() {
       .then((data) => setAnime(data))
       .catch(console.error);
 
-    const fetchEpisodes = fetch(`${API_URL}/animes/${id}/episodes`, {
-      credentials: "include",
-    })
+    const fetchEpisodes = api(`/animes/${id}/episodes`)
       .then((res) => {
         if (!res.ok) throw new Error("Épisodes non trouvés");
         return res.json();
@@ -101,9 +96,8 @@ export default function AnimePage() {
     );
 
     try {
-      const response = await fetch(`${API_URL}/episodes/${epId}/watched`, {
+      const response = await api(`/episodes/${epId}/watched`, {
         method: wasSeen ? "DELETE" : "POST",
-        credentials: "include",
       });
 
       if (response.ok) {

@@ -4,8 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import AnimeCard from "@/components/AnimeCard";
 import { useFavoritesContext } from "@/context/useFavorites";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { api } from "@/lib/api";
 
 interface Anime {
   id: string;
@@ -38,9 +37,7 @@ export default function InfiniteScrollCarousel({
   useEffect(() => {
     async function fetchAnimes() {
       try {
-        const res = await fetch(`${API_URL}${endpoint}`, {
-          credentials: "include",
-        });
+        const res = await api(`${endpoint}`);
         const data = await res.json();
         setAnimes(data);
       } catch (error) {

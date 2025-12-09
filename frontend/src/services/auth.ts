@@ -27,7 +27,11 @@ export async function registerUser(data: {
 export async function loginUser(data: { email: string; password: string }) {
   try {
     const response = await api.post("/login", data);
-    return response.data;
+    const result = response.data;
+
+    localStorage.setItem("jwt_token", result.token);
+
+    return result;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data?.message || error.message);

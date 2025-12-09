@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { api } from "@/lib/api";
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -11,49 +10,34 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return localStorage.getItem("isLoggedIn") === "true";
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        const res = await fetch(`${API_URL}/users/me`, {
-          credentials: "include",
-        });
-        setIsLoggedIn(res.ok);
-        if (res.ok) {
-          localStorage.setItem("isLoggedIn", "true");
-        } else {
-          localStorage.removeItem("isLoggedIn");
-        }
-      } catch {
-        setIsLoggedIn(false);
-        localStorage.removeItem("isLoggedIn");
-      } finally {
-        setLoading(false);
-      }
-    }
-    checkAuth();
-  }, []);
 
   const checkAuth = async () => {
     try {
-      const res = await fetch(`${API_URL}/users/me`, {
-        credentials: "include",
-      });
-      setIsLoggedIn(res.ok);
+      const res = await api("/users/me");
       if (res.ok) {
+        setIsLoggedIn(true);
         localStorage.setItem("isLoggedIn", "true");
       } else {
+        setIsLoggedIn(false);
         localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("jwt_token");
       }
-    } catch {
+    } catch (err) {
       setIsLoggedIn(false);
       localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("jwt_token");
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    checkAuth();
+    const interval = setInterval(checkAuth, 10 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, loading, checkAuth }}>

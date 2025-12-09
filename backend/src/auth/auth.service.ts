@@ -51,6 +51,14 @@ export class AuthService {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { message: 'Connexion réussie' };
+    return {
+      message: 'Connexion réussie',
+      user: {
+        id: user.id.toString(),
+        name: user.name,
+        email: user.email,
+      },
+      token,
+    };
   }
 }

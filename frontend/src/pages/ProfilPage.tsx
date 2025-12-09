@@ -5,8 +5,7 @@ import { useAuth } from "@/context/useAuth";
 import AnimeCard from "@/components/AnimeCard";
 import { Badge } from "@/components/ui/badge";
 import { Trophy } from "lucide-react";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { api } from "@/lib/api";
 
 interface User {
   id: string;
@@ -34,9 +33,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${API_URL}/users/me`, {
-          credentials: "include",
-        });
+        const res = await api(`/users/me`);
 
         if (!res.ok) throw new Error("Utilisateur non trouvé");
 
@@ -51,9 +48,7 @@ export default function ProfilePage() {
 
     const fetchCompleted = async () => {
       try {
-        const res = await fetch(`${API_URL}/animes/completed`, {
-          credentials: "include",
-        });
+        const res = await api(`/animes/completed`);
         if (res.ok) {
           const data = await res.json();
           setCompletedAnimes(Array.isArray(data) ? data : []);
@@ -69,9 +64,8 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     try {
-      await fetch(`${API_URL}/auth/logout`, {
+      await api(`/auth/logout`, {
         method: "POST",
-        credentials: "include",
       });
 
       await checkAuth();

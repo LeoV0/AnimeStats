@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
 import Page1 from "@/components/glow-menu";
 import { useFavoritesContext } from "@/context/useFavorites";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { api } from "@/lib/api";
 
 interface Anime {
   id: string;
@@ -22,9 +21,7 @@ export default function FavoritesPage() {
   useEffect(() => {
     async function fetchFavorites() {
       try {
-        const res = await fetch(`${API_URL}/animes/favorites`, {
-          credentials: "include",
-        });
+        const res = await api(`/animes/favorites`);
         if (res.ok) {
           const data = await res.json();
           setFavorites(data);
