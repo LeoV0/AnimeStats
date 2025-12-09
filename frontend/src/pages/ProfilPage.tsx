@@ -68,8 +68,11 @@ export default function ProfilePage() {
         method: "POST",
       });
 
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("jwt_token");
+
       await checkAuth();
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error("Erreur déconnexion:", error);
     }

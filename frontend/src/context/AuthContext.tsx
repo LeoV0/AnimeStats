@@ -16,11 +16,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkAuth = async () => {
     try {
       const res = await api("/users/me");
+      setIsLoggedIn(res.ok);
       if (res.ok) {
-        setIsLoggedIn(true);
         localStorage.setItem("isLoggedIn", "true");
       } else {
-        setIsLoggedIn(false);
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("jwt_token");
       }
