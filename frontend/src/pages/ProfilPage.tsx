@@ -1,4 +1,3 @@
-import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/useAuth";
@@ -6,7 +5,6 @@ import AnimeCard from "@/components/AnimeCard";
 import { Badge } from "@/components/ui/badge";
 import { LogOut, Trophy } from "lucide-react";
 import { api } from "@/lib/api";
-
 interface User {
   id: string;
   name: string;
