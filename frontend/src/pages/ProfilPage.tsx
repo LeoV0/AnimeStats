@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/useAuth";
 import AnimeCard from "@/components/AnimeCard";
 import { Badge } from "@/components/ui/badge";
-import { Trophy } from "lucide-react";
+import { LogOut, Trophy } from "lucide-react";
 import { api } from "@/lib/api";
 
 interface User {
@@ -100,6 +100,17 @@ export default function ProfilePage() {
                 Bonjour, {user.name}
               </h1>
 
+              <button
+                onClick={handleLogout}
+                className="mt-8 flex items-center gap-3 px-5 py-2.5 text-sm text-red-400 
+             border border-red-500/30 rounded-lg
+             hover:bg-red-500/10 hover:text-red-300 hover:border-red-400
+             transition-all duration-200 cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+                Se déconnecter
+              </button>
+
               {completedAnimes.length > 0 && (
                 <div className="mt-12">
                   <h2 className="mb-6 text-2xl font-bold text-white">
@@ -131,15 +142,6 @@ export default function ProfilePage() {
             <p className="text-xl text-red-400">Erreur de chargement</p>
           )}
         </div>
-      </div>
-
-      <div className="fixed right-6 bottom-6">
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 text-white bg-red-500 rounded-lg shadow-lg cursor-pointer hover:bg-red-600"
-        >
-          Se déconnecter
-        </button>
       </div>
     </div>
   );

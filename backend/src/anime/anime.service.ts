@@ -41,6 +41,14 @@ export class AnimeService {
     });
   }
 
+  async getTenRandomAnimes(): Promise<Anime[]> {
+    return this.prisma.$queryRaw<Anime[]>`
+    SELECT * FROM "Anime"
+    ORDER BY RANDOM()
+    LIMIT 10
+  `;
+  }
+
   async getAllEpisodes(animeId: bigint, userId?: bigint): Promise<any[]> {
     const episodes = await this.prisma.episode.findMany({
       where: { anime_id: animeId },

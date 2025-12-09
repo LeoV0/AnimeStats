@@ -84,6 +84,16 @@ export class AnimeController {
     }));
   }
 
+  @Get('random')
+  async getTenRandomAnimes() {
+    const animes = await this.animeService.getTenRandomAnimes();
+
+    return animes.map((anime) => ({
+      ...anime,
+      id: anime.id.toString(),
+    }));
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('favorites')
   async getUserFavorites(@Req() req: JwtRequest) {

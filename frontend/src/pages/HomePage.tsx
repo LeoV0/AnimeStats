@@ -124,7 +124,7 @@ const HomePage = () => {
           <InProgressSection />
           <div id="animes">
             <JapaneseSection />
-            <InfiniteScrollCarousel endpoint="/animes/latest" />
+            <InfiniteScrollCarousel endpoint="/animes/random" />
           </div>
         </div>
       </div>

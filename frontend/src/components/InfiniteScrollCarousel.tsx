@@ -20,7 +20,7 @@ interface InfiniteScrollCarouselProps {
 }
 
 export default function InfiniteScrollCarousel({
-  endpoint = "/animes/latest",
+  endpoint = "/animes/random",
   baseVelocity = 0.5,
 }: InfiniteScrollCarouselProps) {
   const [animes, setAnimes] = useState<Anime[]>([]);
