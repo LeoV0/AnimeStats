@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tv, Bookmark, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
-import Page1 from "@/components/glow-menu";
 import JapaneseSection from "@/components/JapaneseSection";
 import InfiniteScrollCarousel from "@/components/InfiniteScrollCarousel";
 import InProgressSection from "@/components/InProgressSection";
@@ -56,12 +55,6 @@ const HomePage = () => {
           </Suspense>
         </div>
       )}
-
-      <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
-        <div className="px-6 w-full max-w-6xl pointer-events-auto">
-          <Page1 />
-        </div>
-      </div>
 
       <div className="flex relative flex-col justify-center items-center p-6 min-h-screen sm:p-8">
         <div className="flex relative z-10 flex-col items-center space-y-12 w-full max-w-6xl pt-15">

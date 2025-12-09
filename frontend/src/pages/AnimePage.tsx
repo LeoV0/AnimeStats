@@ -1,4 +1,3 @@
-import Page1 from "@/components/glow-menu";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Toggle } from "@/components/ui/toggle";
@@ -113,12 +112,6 @@ export default function AnimePage() {
 
   return (
     <div className="relative w-full min-h-screen bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-gray-200">
-      <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
-        <div className="px-6 w-full max-w-6xl pointer-events-auto">
-          <Page1 />
-        </div>
-      </div>
-
       <div className="relative z-10 p-6 pt-40">
         <div className="flex flex-col gap-12 mx-auto max-w-6xl md:flex-row">
           <div className="flex flex-col gap-6 flex-2">

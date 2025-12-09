@@ -1,7 +1,6 @@
 "use client";
 
 import AnimeList from "@/components/AnimeList";
-import Page1 from "@/components/glow-menu";
 import { useTags } from "@/hooks/use-tags";
 import { X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -88,12 +87,6 @@ export default function DiscoverPage() {
 
   return (
     <div className="relative min-h-screen bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-white">
-      <div className="flex fixed inset-x-0 top-4 z-50 justify-center pointer-events-none">
-        <div className="px-6 w-full max-w-6xl pointer-events-auto">
-          <Page1 />
-        </div>
-      </div>
-
       <div className="flex relative z-10 flex-col items-center px-6 pt-32 pb-20 min-h-screen">
         <div className="space-y-12 w-full max-w-6xl">
           <div className="space-y-1 text-left">

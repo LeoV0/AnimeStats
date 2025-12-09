@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
-import Page1 from "@/components/glow-menu";
 import { useFavoritesContext } from "@/context/useFavorites";
 import { api } from "@/lib/api";
 
@@ -38,12 +37,6 @@ export default function FavoritesPage() {
 
   return (
     <div className="relative w-full bg-linear-to-br from-black via-[#0B0F14] to-[#1A2428] text-white min-h-screen">
-      <div className="flex fixed right-0 left-0 top-4 z-50 justify-center pointer-events-none">
-        <div className="px-6 w-full max-w-6xl pointer-events-auto">
-          <Page1 />
-        </div>
-      </div>
-
       <div className="flex relative z-10 flex-col items-center p-6 pt-32 min-h-screen">
         <div className="space-y-8 w-full max-w-6xl">
           <div className="space-y-1 text-left">
