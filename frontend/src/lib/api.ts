@@ -19,7 +19,9 @@ export const api = async (endpoint: string, options: RequestInit = {}) => {
 
   if (response.status === 401) {
     localStorage.removeItem("jwt_token");
-    window.location.href = "/login";
+    if (!window.location.pathname.startsWith("/login")) {
+      window.location.href = "/login";
+    }
   }
 
   return response;
