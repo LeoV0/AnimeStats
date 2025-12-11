@@ -74,7 +74,7 @@ export default function InProgressSection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 justify-items-center sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 justify-items-center md:gap-8 md:grid-cols-3 xl:grid-cols-4">
         {animes.map((anime) => (
           <AnimeCard
             key={anime.id}

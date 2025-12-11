@@ -5,11 +5,41 @@ import AnimeCard from "@/components/AnimeCard";
 import { Badge } from "@/components/ui/badge";
 import { LogOut, Trophy } from "lucide-react";
 import { api } from "@/lib/api";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 interface User {
   id: string;
   name: string;
   email: string;
+  role: string;
 }
+
+const getRoleBadge = (role: string) => {
+  const labels: Record<string, string> = {
+    USER: "Utilisateur",
+    ADMIN: "Administrateur",
+    CONTRIBUTOR: "Contributeur",
+  };
+
+  const colors: Record<string, string> = {
+    USER: "bg-gray-500/20 border-gray-500/50 text-gray-400",
+    ADMIN: "bg-red-500/20 border-red-500/50 text-red-400",
+    CONTRIBUTOR: "bg-blue-500/20 border-blue-500/50 text-blue-400",
+  };
+
+  const label = labels[role] || role;
+  const colorClass =
+    colors[role] || "bg-gray-500/20 border-gray-500/50 text-gray-400";
+
+  return (
+    <Badge className={`ml-3 text-sm border translate-y-[-2px] ${colorClass}`}>
+      {label}
+    </Badge>
+  );
+};
 
 interface Anime {
   id: string;
@@ -89,7 +119,7 @@ export default function ProfilePage() {
             <>
               <p className="mb-2 text-xl text-gray-400">あなたのプロフィール</p>
               <h1 className="text-3xl font-bold text-white">
-                Bonjour, {user.name}
+                Bonjour, {user.name} {getRoleBadge(user.role)}
               </h1>
 
               <button
@@ -108,25 +138,35 @@ export default function ProfilePage() {
                   <h2 className="mb-6 text-2xl font-bold text-white">
                     Animes Terminés
                   </h2>
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {completedAnimes.map((anime) => (
-                      <AnimeCard
-                        key={anime.id}
-                        id={anime.id}
-                        title={anime.name}
-                        description={anime.name_japanese}
-                        image={anime.image_url}
-                        showFavorite={false}
-                        badge={
-                          <Badge className="flex gap-1 items-center text-yellow-400 border bg-yellow-500/20 border-yellow-500/50">
-                            <Trophy className="w-3 h-3" />
-                            Complété
-                          </Badge>
-                        }
-                        progress={`${anime.totalEpisodes} épisodes`}
-                      />
-                    ))}
-                  </div>
+                  <Carousel
+                    opts={{
+                      align: "start",
+                    }}
+                    className="w-full"
+                  >
+                    <CarouselContent>
+                      {completedAnimes.map((anime) => (
+                        <CarouselItem
+                          key={anime.id}
+                          className="basis-1/2 md:basis-1/3 lg:basis-1/4"
+                        >
+                          <AnimeCard
+                            id={anime.id}
+                            title={anime.name}
+                            description={anime.name_japanese}
+                            image={anime.image_url}
+                            showFavorite={false}
+                            badge={
+                              <Badge className="flex gap-1 items-center text-yellow-400 border bg-yellow-500/20 border-yellow-500/50">
+                                <Trophy className="w-3 h-3" />
+                                Complété
+                              </Badge>
+                            }
+                          />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  </Carousel>
                 </div>
               )}
             </>

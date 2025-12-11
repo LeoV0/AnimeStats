@@ -132,7 +132,7 @@ export default function InfiniteScrollCarousel({
                 className="pointer-events-none shrink-0"
               >
                 <div
-                  className="pointer-events-auto"
+                  className="pointer-events-auto w-[160px] sm:w-[280px]"
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
                 >

@@ -32,11 +32,18 @@ enum AnimeType {
   MOVIE
 }
 
+enum UserRole {
+  USER
+  CONTRIBUTOR
+  ADMIN
+}
+
 model User {
   id BigInt @id @default(autoincrement())
   name String
   email String @unique
   password_hash String
+  role UserRole @default(USER)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   favorites Favorite[]

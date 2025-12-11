@@ -56,7 +56,7 @@ export default function AnimeCard({
   return (
     <Tilt
       rotationFactor={20}
-      className="relative group w-[280px] h-[400px] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-lg transition-all hover:shadow-xl"
+      className="relative group w-full aspect-[5/8] md:aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-lg transition-all hover:shadow-xl"
     >
       <motion.img
         src={image}
@@ -76,7 +76,7 @@ export default function AnimeCard({
             {title}
           </h3>
           {progress && (
-            <p className="absolute right-3 bottom-3 z-10 px-2 py-1 text-xs text-white">
+            <p className="absolute top-3 right-3 z-10 px-2 py-1 text-xs text-white rounded-md backdrop-blur-sm bg-black/60">
               {progress}
             </p>
           )}
@@ -104,7 +104,7 @@ export default function AnimeCard({
         <Button
           variant="secondary"
           asChild
-          className="px-4 py-1 mt-2 text-sm text-white rounded-lg border cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20"
+          className="self-center px-4 py-1 mt-2 text-sm text-white rounded-lg border cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20 md:self-start"
         >
           <Link to={`/animes/${id}`}>Lire plus</Link>
         </Button>

@@ -4,12 +4,19 @@ CREATE TYPE "AnimeStatus" AS ENUM ('ONGOING', 'FINISHED', 'PAUSED');
 -- CreateEnum
 CREATE TYPE "UserAnimeStatusEnum" AS ENUM ('WATCHING', 'COMPLETED', 'DROPPED', 'PLAN_TO_WATCH');
 
+-- CreateEnum
+CREATE TYPE "AnimeType" AS ENUM ('ANIME', 'MOVIE');
+
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('USER', 'CONTRIBUTOR', 'ADMIN');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" BIGSERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password_hash" TEXT NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT 'USER',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -25,6 +32,9 @@ CREATE TABLE "Anime" (
     "image_url" TEXT NOT NULL,
     "status" "AnimeStatus" NOT NULL,
     "total_episodes" INTEGER NOT NULL,
+    "type" "AnimeType" NOT NULL DEFAULT 'ANIME',
+    "studio" TEXT,
+    "tags" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Anime_pkey" PRIMARY KEY ("id")
@@ -43,11 +53,10 @@ CREATE TABLE "Episode" (
 
 -- CreateTable
 CREATE TABLE "Favorite" (
-    "id" BIGSERIAL NOT NULL,
     "user_id" BIGINT NOT NULL,
     "anime_id" BIGINT NOT NULL,
 
-    CONSTRAINT "Favorite_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Favorite_pkey" PRIMARY KEY ("user_id","anime_id")
 );
 
 -- CreateTable
@@ -73,6 +82,12 @@ CREATE TABLE "User_anime_status" (
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Episode_anime_id_number_key" ON "Episode"("anime_id", "number");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_episode_progression_user_id_episode_id_key" ON "User_episode_progression"("user_id", "episode_id");
+
 -- AddForeignKey
 ALTER TABLE "Episode" ADD CONSTRAINT "Episode_anime_id_fkey" FOREIGN KEY ("anime_id") REFERENCES "Anime"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -93,3 +108,4 @@ ALTER TABLE "User_anime_status" ADD CONSTRAINT "User_anime_status_user_id_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "User_anime_status" ADD CONSTRAINT "User_anime_status_anime_id_fkey" FOREIGN KEY ("anime_id") REFERENCES "Anime"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
