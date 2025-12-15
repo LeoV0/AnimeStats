@@ -95,7 +95,6 @@ export default function InProgressSection() {
                 </div>
               </Badge>
             }
-            progress={`Épisode ${anime.lastSeenEpisode}`}
           />
         ))}
       </div>
