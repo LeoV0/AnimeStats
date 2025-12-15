@@ -27,7 +27,7 @@ export default function InfiniteScrollCarousel({
   const [loading, setLoading] = useState(true);
   const { isFavorite, toggleFavorite, refreshFavorites } =
     useFavoritesContext();
-
+    
   const [width, setWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
