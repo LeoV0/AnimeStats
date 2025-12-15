@@ -151,20 +151,35 @@ Carousel.displayName = "Carousel";
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
+>(({ className, children, ...props }, ref) => {
   const { carouselRef, orientation } = useCarousel();
 
   return (
-    <div ref={carouselRef} className="overflow-hidden">
+    <div
+      ref={carouselRef}
+      className="overflow-hidden"
+      style={{
+        maskImage:
+          orientation === "horizontal"
+            ? "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)"
+            : "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
+        WebkitMaskImage:
+          orientation === "horizontal"
+            ? "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)"
+            : "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
+      }}
+    >
       <div
         ref={ref}
         className={cn(
-          "flex",
+          "flex cursor-grab active:cursor-grabbing select-none",
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
           className
         )}
         {...props}
-      />
+      >
+        {children}
+      </div>
     </div>
   );
 });

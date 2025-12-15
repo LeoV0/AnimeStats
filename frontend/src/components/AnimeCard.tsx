@@ -56,7 +56,7 @@ export default function AnimeCard({
   return (
     <Tilt
       rotationFactor={20}
-      className="relative group w-full aspect-[5/8] md:aspect-[2/3] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-lg transition-all hover:shadow-xl"
+      className="relative group w-full aspect-5/8 md:aspect-2/3 rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-lg transition-all hover:shadow-xl"
     >
       <motion.img
         src={image}
