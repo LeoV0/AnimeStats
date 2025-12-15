@@ -117,8 +117,8 @@ export default function ProfilePage() {
             </div>
           ) : user ? (
             <>
-              <p className="mb-2 text-xl text-gray-400">あなたのプロフィール</p>
-              <h1 className="text-3xl font-bold text-white">
+              <p className="mb-2 text-4xl font-bold md:text-5xl text-white/90">あなたのプロフィール</p>
+              <h1 className="text-xl md:text-2xl text-neutral-400">
                 Bonjour, {user.name} {getRoleBadge(user.role)}
               </h1>
 

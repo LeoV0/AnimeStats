@@ -40,10 +40,10 @@ export default function FavoritesPage() {
       <div className="flex relative z-10 flex-col items-center p-6 pt-32 min-h-screen">
         <div className="space-y-8 w-full max-w-6xl">
           <div className="space-y-1 text-left">
-            <h1 className="text-2xl font-bold md:text-3xl text-white/90">
+            <h1 className="text-4xl font-bold md:text-5xl text-white/90">
               私の好きなアニメ
             </h1>
-            <p className="text-lg md:text-xl text-neutral-400">Mes favoris</p>
+            <p className="text-xl md:text-2xl text-neutral-400">Mes favoris</p>
           </div>
 
           {loading && (
