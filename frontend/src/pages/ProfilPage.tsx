@@ -10,6 +10,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import InProgressSection from "@/components/InProgressSection";
 interface User {
   id: string;
   name: string;
@@ -133,16 +134,23 @@ export default function ProfilePage() {
                 Se déconnecter
               </button>
 
+          <InProgressSection />
+
               {completedAnimes.length > 0 && (
-                <div className="mt-12">
-                  <h2 className="mb-6 text-2xl font-bold text-white">
-                    Animes Terminés
-                  </h2>
+                <div className="mt-12 text-center">
+                  <div className="space-y-2">
+                    <h2 className="mb-2 text-3xl font-extrabold tracking-wide text-center sm:text-4xl md:text-5xl lg:text-6xl">
+                      完結したアニメ
+                    </h2>
+                    <p className="text-lg sm:text-xl md:text-2xl text-neutral-400">
+                      Animés Terminés
+                    </p>
+                  </div>
                   <Carousel
                     opts={{
                       align: "start",
                     }}
-                    className="w-full"
+                    className="w-full mt-6"
                   >
                     <CarouselContent>
                       {completedAnimes.map((anime) => (

@@ -70,7 +70,7 @@ export default function AnimeCard({
 
       {badge && <div className="absolute top-3 left-3 z-10">{badge}</div>}
 
-      <div className="flex absolute right-0 bottom-0 left-0 flex-col p-4 space-y-3">
+      <div className="flex absolute right-0 bottom-0 left-0 flex-col p-4 space-y-3 text-left">
         <div className="flex justify-between items-start">
           <h3 className="text-lg font-semibold text-white line-clamp-2">
             {title}
@@ -104,7 +104,7 @@ export default function AnimeCard({
         <Button
           variant="secondary"
           asChild
-          className="self-center px-4 py-1 mt-2 text-sm text-white rounded-lg border cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20 md:self-start"
+          className="self-start px-4 py-1 mt-2 text-sm text-white rounded-lg border cursor-pointer w-fit bg-white/10 border-white/20 hover:bg-white/20"
         >
           <Link to={`/animes/${id}`}>Lire plus</Link>
         </Button>

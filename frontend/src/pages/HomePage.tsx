@@ -5,7 +5,6 @@ import { Tv, Bookmark, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
 import JapaneseSection from "@/components/JapaneseSection";
 import InfiniteScrollCarousel from "@/components/InfiniteScrollCarousel";
-import InProgressSection from "@/components/InProgressSection";
 import { useAuth } from "@/context/useAuth";
 
 const Scene = React.lazy(() =>
@@ -114,7 +113,6 @@ const HomePage = () => {
 
       <div className="relative z-10 py-16">
         <div className="px-6 mx-auto space-y-24 max-w-7xl">
-          <InProgressSection />
           <div id="animes">
             <JapaneseSection />
             <InfiniteScrollCarousel endpoint="/animes/random" />

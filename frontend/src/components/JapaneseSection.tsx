@@ -1,6 +1,6 @@
 export default function JapaneseSection({
-  japaneseWord = "最近のアニメ",
-  frenchTranslation = "Animé ajouté récemment",
+  japaneseWord = "アニメを探索する",
+  frenchTranslation = "Explorer les animés",
 }: {
   japaneseWord?: string;
   frenchTranslation?: string;
