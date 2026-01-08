@@ -1,4 +1,4 @@
-# YumeTack 🎌
+# YumeTrack 🎌
 
 Application full-stack permettant de découvrir des animés et de suivre précisément les épisodes visionnés.
 Projet personnel orienté **UX**, **performance** et **architecture scalable**, avec une API REST sécurisée.
